@@ -17,6 +17,14 @@ body {
   color: rgb(254 254 254);
 }
 
+/* Prevent accidental horizontal scrollbars app-wide */
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden; /* suppress global scrollbar; use content area scrolling */
+}
+
 // Ensure form controls inherit the app font and color
 button,
 input,

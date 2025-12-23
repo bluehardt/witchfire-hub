@@ -1,4 +1,4 @@
-<mat-drawer-container style="height: 100vh">
+<mat-drawer-container>
   <mat-drawer
     position="end"
     mode="over"
@@ -33,13 +33,16 @@
             </svg>
           </button>
           <button
-            class="icon-btn"
+            class="icon-btn close-btn"
             (click)="closeDrawer()"
             aria-label="Close"
             matTooltip="Close"
             matTooltipPosition="above"
           >
-            ✕
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+            </svg>
           </button>
         </div>
       </div>
@@ -176,6 +179,7 @@
           (click)="openDrawer('r1')"
           (keydown.enter)="openDrawer('r1')"
           (keydown.space)="openDrawer('r1')"
+          
         >
           <div class="item-label">{{ build?.firstRangedWeapon?.name }}</div>
           <div class="item-img-container">
@@ -205,8 +209,12 @@
             matTooltipPosition="above"
             (click)="$event.stopPropagation(); clearSlot('r1')"
           >
-            ✕
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+            </svg>
           </button>
+          
         </div>
         <ng-template #r1Skeleton>
           <div
@@ -226,6 +234,7 @@
           (click)="openDrawer('r2')"
           (keydown.enter)="openDrawer('r2')"
           (keydown.space)="openDrawer('r2')"
+          
         >
           <div class="item-label">{{ build?.secondRangedWeapon?.name }}</div>
           <div class="item-img-container">
@@ -255,8 +264,12 @@
             matTooltipPosition="above"
             (click)="$event.stopPropagation(); clearSlot('r2')"
           >
-            ✕
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+            </svg>
           </button>
+          
         </div>
         <ng-template #r2Skeleton>
           <div
@@ -276,6 +289,7 @@
           (click)="openDrawer('rd')"
           (keydown.enter)="openDrawer('rd')"
           (keydown.space)="openDrawer('rd')"
+          
         >
           <div class="item-label">{{ build?.demonicWeapon?.name }}</div>
           <div class="item-img-container">
@@ -305,8 +319,12 @@
             matTooltipPosition="above"
             (click)="$event.stopPropagation(); clearSlot('rd')"
           >
-            ✕
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+            </svg>
           </button>
+          
         </div>
         <ng-template #rdSkeleton>
           <div
@@ -329,6 +347,7 @@
             (click)="openDrawer('melee')"
             (keydown.enter)="openDrawer('melee')"
             (keydown.space)="openDrawer('melee')"
+            
           >
             <div class="item-label">
               {{ build?.meleeWeapon?.name || "Melee" }}
@@ -360,8 +379,12 @@
               matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('melee')"
             >
-              ✕
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+              </svg>
             </button>
+            
           </div>
           <ng-template #meleeSkeleton>
             <div
@@ -383,6 +406,7 @@
             (click)="openDrawer('ls')"
             (keydown.enter)="openDrawer('ls')"
             (keydown.space)="openDrawer('ls')"
+            
           >
             <div class="item-label">
               {{ build?.lightSpell?.name || "Light Spell" }}
@@ -414,8 +438,12 @@
               matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('ls')"
             >
-              ✕
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+              </svg>
             </button>
+            
           </div>
           <ng-template #lightSpellSkeleton>
             <div
@@ -437,6 +465,7 @@
             (click)="openDrawer('hs')"
             (keydown.enter)="openDrawer('hs')"
             (keydown.space)="openDrawer('hs')"
+            
           >
             <div class="item-label">
               {{ build?.heavySpell?.name || "Heavy Spell" }}
@@ -468,8 +497,12 @@
               matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('hs')"
             >
-              ✕
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+              </svg>
             </button>
+            
           </div>
           <ng-template #heavySpellSkeleton>
             <div
@@ -491,6 +524,7 @@
             (click)="openDrawer('relic')"
             (keydown.enter)="openDrawer('relic')"
             (keydown.space)="openDrawer('relic')"
+            
           >
             <div class="item-label">{{ build?.relic?.name || "Relic" }}</div>
             <div class="item-img-container">
@@ -520,8 +554,12 @@
               matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('relic')"
             >
-              ✕
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+              </svg>
             </button>
+            
           </div>
           <ng-template #relicSkeleton>
             <div
@@ -543,6 +581,7 @@
             (click)="openDrawer('fetish')"
             (keydown.enter)="openDrawer('fetish')"
             (keydown.space)="openDrawer('fetish')"
+            
           >
             <div class="item-label">{{ build?.fetish?.name || "Fetish" }}</div>
             <div class="item-img-container">
@@ -572,8 +611,12 @@
               matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('fetish')"
             >
-              ✕
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+              </svg>
             </button>
+            
           </div>
           <ng-template #fetishSkeleton>
             <div
@@ -595,6 +638,7 @@
             (click)="openDrawer('ring')"
             (keydown.enter)="openDrawer('ring')"
             (keydown.space)="openDrawer('ring')"
+            
           >
             <div class="item-label">{{ build?.ring?.name || "Ring" }}</div>
             <div class="item-img-container">
@@ -621,8 +665,12 @@
               matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('ring')"
             >
-              ✕
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+              </svg>
             </button>
+            
           </div>
           <ng-template #ringSkeleton>
             <div
@@ -748,7 +796,7 @@
   </mat-drawer-content>
 </mat-drawer-container>
 
-<!-- Floating copy-URL button -->
+<!-- Floating action: copy URL -->
 <button
   *ngIf="!drawerOpen"
   class="copy-url-fab"
@@ -766,6 +814,8 @@
   </svg>
   <span class="sr-only">Copy URL</span>
 </button>
+
+ 
 
 <!-- Helper: Element background rendering -->
 <ng-template #elementBg let-elements let-label="label">
