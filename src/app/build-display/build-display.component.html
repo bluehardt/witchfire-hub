@@ -24,7 +24,8 @@
             class="icon-btn"
             (click)="copyShareUrl()"
             aria-label="Copy URL"
-            title="Copy URL"
+            matTooltip="Copy URL"
+            matTooltipPosition="above"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <rect x="9" y="3" width="12" height="12" rx="2" ry="2" />
@@ -35,7 +36,8 @@
             class="icon-btn"
             (click)="closeDrawer()"
             aria-label="Close"
-            title="Close"
+            matTooltip="Close"
+            matTooltipPosition="above"
           >
             ✕
           </button>
@@ -124,7 +126,8 @@
                   class="element-dot"
                   *ngFor="let el of item.element"
                   [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                  [title]="getElementLabel(el)"
+                  [matTooltip]="getElementLabel(el)"
+                  matTooltipPosition="above"
                 ></span>
               </div>
             </div>
@@ -190,14 +193,16 @@
               class="tile-element-dot"
               *ngFor="let el of build?.firstRangedWeapon?.element"
               [ngStyle]="{ backgroundColor: getElementColor(el) }"
-              [title]="getElementLabel(el)"
+              [matTooltip]="getElementLabel(el)"
+              matTooltipPosition="above"
             ></span>
           </div>
           <button
             type="button"
             class="tile-clear-btn"
             aria-label="Clear"
-            title="Clear"
+            matTooltip="Clear"
+            matTooltipPosition="above"
             (click)="$event.stopPropagation(); clearSlot('r1')"
           >
             ✕
@@ -238,14 +243,16 @@
               class="tile-element-dot"
               *ngFor="let el of build?.secondRangedWeapon?.element"
               [ngStyle]="{ backgroundColor: getElementColor(el) }"
-              [title]="getElementLabel(el)"
+              [matTooltip]="getElementLabel(el)"
+              matTooltipPosition="above"
             ></span>
           </div>
           <button
             type="button"
             class="tile-clear-btn"
             aria-label="Clear"
-            title="Clear"
+            matTooltip="Clear"
+            matTooltipPosition="above"
             (click)="$event.stopPropagation(); clearSlot('r2')"
           >
             ✕
@@ -286,14 +293,16 @@
               class="tile-element-dot"
               *ngFor="let el of build?.demonicWeapon?.element"
               [ngStyle]="{ backgroundColor: getElementColor(el) }"
-              [title]="getElementLabel(el)"
+              [matTooltip]="getElementLabel(el)"
+              matTooltipPosition="above"
             ></span>
           </div>
           <button
             type="button"
             class="tile-clear-btn"
             aria-label="Clear"
-            title="Clear"
+            matTooltip="Clear"
+            matTooltipPosition="above"
             (click)="$event.stopPropagation(); clearSlot('rd')"
           >
             ✕
@@ -339,14 +348,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.meleeWeapon?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [title]="getElementLabel(el)"
+                [matTooltip]="getElementLabel(el)"
+                matTooltipPosition="above"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              title="Clear"
+              matTooltip="Clear"
+              matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('melee')"
             >
               ✕
@@ -391,14 +402,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.lightSpell?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [title]="getElementLabel(el)"
+                [matTooltip]="getElementLabel(el)"
+                matTooltipPosition="above"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              title="Clear"
+              matTooltip="Clear"
+              matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('ls')"
             >
               ✕
@@ -443,14 +456,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.heavySpell?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [title]="getElementLabel(el)"
+                [matTooltip]="getElementLabel(el)"
+                matTooltipPosition="above"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              title="Clear"
+              matTooltip="Clear"
+              matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('hs')"
             >
               ✕
@@ -493,14 +508,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.relic?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [title]="getElementLabel(el)"
+                [matTooltip]="getElementLabel(el)"
+                matTooltipPosition="above"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              title="Clear"
+              matTooltip="Clear"
+              matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('relic')"
             >
               ✕
@@ -543,14 +560,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.fetish?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [title]="getElementLabel(el)"
+                [matTooltip]="getElementLabel(el)"
+                matTooltipPosition="above"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              title="Clear"
+              matTooltip="Clear"
+              matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('fetish')"
             >
               ✕
@@ -590,14 +609,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.ring?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [title]="getElementLabel(el)"
+                [matTooltip]="getElementLabel(el)"
+                matTooltipPosition="above"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              title="Clear"
+              matTooltip="Clear"
+              matTooltipPosition="above"
               (click)="$event.stopPropagation(); clearSlot('ring')"
             >
               ✕
@@ -732,7 +753,8 @@
   *ngIf="!drawerOpen"
   class="copy-url-fab"
   aria-label="Copy build URL"
-  title="Copy URL"
+  matTooltip="Copy URL"
+  matTooltipPosition="above"
   tabindex="0"
   (click)="copyShareUrl()"
   (keydown.enter)="copyShareUrl()"

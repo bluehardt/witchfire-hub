@@ -11,6 +11,7 @@ import { Build } from "../models/build.model";
 import { NgForOf, NgIf, NgStyle } from "@angular/common";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { FormsModule } from "@angular/forms";
 import { ElementType } from "../enums/element-type.enum";
 import { RosaryBeadRequirement } from "../models/rosary-bead.model";
@@ -28,6 +29,7 @@ import { SpellType } from "../enums/spell-type.enum";
     MatSidenavModule,
     FormsModule,
     MatSnackBarModule,
+    MatTooltipModule,
   ],
   templateUrl: "./build-display.component.html",
   styleUrl: "./build-display.component.scss",

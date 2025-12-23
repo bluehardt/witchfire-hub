@@ -52,6 +52,11 @@
     padding: 0.5rem;
   }
 
+  // Allow page scrolling on tablets (fix cut-off content)
+  .mat-drawer-content {
+    overflow: auto;
+  }
+
   // Treat tablets as mobile: small image containers and matching skeletons
   .item-img-container {
     width: 48px;
