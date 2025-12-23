@@ -1,233 +1,749 @@
-<!-- http://localhost:4200/build/due.fat.vul.mos.bc.bs.bob.bal.met~aab.adb.aib.ap1.apb.air~ded.des.ear.fir.far.gun -->
-<!-- http://localhost:4200/build/due.fat.vul.mos.bc.bs.bob.bal.met-aab.adb.aib.ap1.apb-air.ded.des.ear.fir.far.gun -->
+<mat-drawer-container style="height: 100vh">
+  <mat-drawer
+    position="end"
+    mode="over"
+    [opened]="drawerOpen"
+    class="picker-drawer"
+    (closedStart)="drawerOpen = false"
+  >
+    <div
+      class="d-flex flex-column g-2"
+      style="
+        padding: 1rem;
+        min-width: 280px;
+        max-width: 360px;
+        height: calc(100% - 2rem);
+      "
+    >
+      <div class="d-flex justify-content-between align-items-center">
+        <span style="font-weight: 600; font-size: 1.5rem">{{
+          drawerTitle
+        }}</span>
+        <div class="d-flex align-items-center" style="gap: 0.5rem">
+          <button
+            class="icon-btn"
+            (click)="copyShareUrl()"
+            aria-label="Copy URL"
+            title="Copy URL"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="9" y="3" width="12" height="12" rx="2" ry="2" />
+              <rect x="3" y="9" width="12" height="12" rx="2" ry="2" />
+            </svg>
+          </button>
+          <button
+            class="icon-btn"
+            (click)="closeDrawer()"
+            aria-label="Close"
+            title="Close"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+      <input
+        [(ngModel)]="searchTerm"
+        type="text"
+        placeholder="Search..."
+        style="
+          padding: 0.5rem;
+          border-radius: 6px;
+          border: 1px solid #555;
+          background: #111;
+          color: #eee;
+        "
+      />
+      <button
+        (click)="clearSelection()"
+        class="drawer-item"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.5rem;
+          border-radius: 8px;
+          border: 1px solid #444;
+          background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+            #222;
+          color: #ccc;
+        "
+      >
+        <span>Clear selection</span>
+        <span *ngIf="currentSelectionName"> ({{ currentSelectionName }})</span>
+      </button>
+      <div
+        style="
+          flex: 1;
+          overflow: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          padding-bottom: 0.75rem;
+        "
+      >
+        <button
+          *ngFor="let item of currentItems"
+          (click)="selectItem(item)"
+          class="drawer-item"
+          [class.has-element]="item?.element?.length"
+          [ngStyle]="{
+            background:
+              'linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), #222'
+          }"
+          style="
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            padding: 0.5rem;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #eee;
+            text-align: left;
+          "
+        >
+          <img
+            [src]="item.image"
+            alt=""
+            style="width: 36px; height: 36px; object-fit: contain"
+          />
+          <div
+            class="drawer-item-content"
+            style="display: flex; flex-direction: column; gap: 0.25rem"
+          >
+            <div class="drawer-item-header">
+              <span class="item-name" style="font-size: 0.95rem">{{
+                item.name
+              }}</span>
+              <div
+                class="element-dots"
+                *ngIf="item?.element?.length"
+                aria-label="Item elements"
+              >
+                <span
+                  class="element-dot"
+                  *ngFor="let el of item.element"
+                  [ngStyle]="{ backgroundColor: getElementColor(el) }"
+                  [title]="getElementLabel(el)"
+                ></span>
+              </div>
+            </div>
+            <span
+              style="font-size: 0.8rem; color: #aaa"
+              *ngIf="item.power || item.effect || item.description"
+              >{{ item.power || item.effect || item.description }}</span
+            >
+            <!-- Bead requirements as chips when picking beads -->
+            <div
+              class="bead-req-pills"
+              *ngIf="drawerSlot?.type === 'bead' && item?.requirement as req"
+            >
+              <ng-container *ngIf="req.flesh">
+                <span class="bead-pill">Flesh ({{ req.flesh }})</span>
+              </ng-container>
+              <ng-container *ngIf="req.blood">
+                <span class="bead-pill">Blood ({{ req.blood }})</span>
+              </ng-container>
+              <ng-container *ngIf="req.mind">
+                <span class="bead-pill">Mind ({{ req.mind }})</span>
+              </ng-container>
+              <ng-container *ngIf="req.witchery">
+                <span class="bead-pill">Witchery ({{ req.witchery }})</span>
+              </ng-container>
+              <ng-container *ngIf="req.arsenal">
+                <span class="bead-pill">Arsenal ({{ req.arsenal }})</span>
+              </ng-container>
+              <ng-container *ngIf="req.faith">
+                <span class="bead-pill">Faith ({{ req.faith }})</span>
+              </ng-container>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </mat-drawer>
 
-<div class="container">
-  <div class="ranged-weapons">
-    <div class="item-card" *ngIf="build?.firstRangedWeapon">
-      <div class="item-label">{{ build?.firstRangedWeapon?.name }}</div>
-      <div
-        class="item-img-container"
-        [ngStyle]="{
-          background: getElementBackground(build?.firstRangedWeapon?.element)
-        }"
-      >
-        <img
-          *ngIf="build?.firstRangedWeapon?.image"
-          [src]="build?.firstRangedWeapon?.image"
-          alt="{{ build?.firstRangedWeapon?.name }}"
-        />
-      </div>
-    </div>
-    <div class="item-card" *ngIf="build?.secondRangedWeapon">
-      <div class="item-label">{{ build?.secondRangedWeapon?.name }}</div>
-      <div
-        class="item-img-container"
-        [ngStyle]="{
-          background: getElementBackground(build?.secondRangedWeapon?.element)
-        }"
-      >
-        <img
-          *ngIf="build?.secondRangedWeapon?.image"
-          [src]="build?.secondRangedWeapon?.image"
-          alt="{{ build?.secondRangedWeapon?.name }}"
-        />
-      </div>
-    </div>
-    <div class="item-card" *ngIf="build?.demonicWeapon">
-      <div class="item-label">{{ build?.demonicWeapon?.name }}</div>
-      <div
-        class="item-img-container"
-        [ngStyle]="{
-          background: getElementBackground(build?.demonicWeapon?.element)
-        }"
-      >
-        <img
-          *ngIf="build?.demonicWeapon?.image"
-          [src]="build?.demonicWeapon?.image"
-          alt="{{ build?.demonicWeapon?.name }}"
-        />
-      </div>
-    </div>
-  </div>
-  <div class="melee-spells-items">
-    <div class="melee">
-      <div class="item-card" *ngIf="build?.meleeWeapon; else meleeSkeleton">
-        <div class="item-label">
-          {{ build?.meleeWeapon?.name || "Melee" }}
-        </div>
+  <mat-drawer-content>
+    <div class="container">
+      <div class="ranged-weapons">
         <div
-          class="item-img-container"
-          [ngStyle]="{
-            background: getElementBackground(build?.meleeWeapon?.element)
-          }"
+          class="item-card"
+          *ngIf="build?.firstRangedWeapon; else r1Skeleton"
+          tabindex="0"
+          (click)="openDrawer('r1')"
+          (keydown.enter)="openDrawer('r1')"
+          (keydown.space)="openDrawer('r1')"
         >
-          <img
-            *ngIf="build?.meleeWeapon?.image"
-            [src]="build?.meleeWeapon?.image"
-            alt="{{ build?.meleeWeapon?.name }}"
-          />
+          <div class="item-label">{{ build?.firstRangedWeapon?.name }}</div>
+          <div class="item-img-container">
+            <img
+              *ngIf="build?.firstRangedWeapon?.image"
+              [src]="build?.firstRangedWeapon?.image"
+              alt="{{ build?.firstRangedWeapon?.name }}"
+            />
+          </div>
+          <div
+            class="tile-element-dots"
+            *ngIf="build?.firstRangedWeapon?.element?.length"
+          >
+            <span
+              class="tile-element-dot"
+              *ngFor="let el of build?.firstRangedWeapon?.element"
+              [ngStyle]="{ backgroundColor: getElementColor(el) }"
+              [title]="getElementLabel(el)"
+            ></span>
+          </div>
+          <button
+            type="button"
+            class="tile-clear-btn"
+            aria-label="Clear"
+            title="Clear"
+            (click)="$event.stopPropagation(); clearSlot('r1')"
+          >
+            ✕
+          </button>
         </div>
-      </div>
-      <ng-template #meleeSkeleton>
-        <div class="item-card skeleton">
-          <div class="item-label">Melee</div>
-          <div class="item-img-container"></div>
-        </div>
-      </ng-template>
-    </div>
-    <div class="light-spell">
-      <div class="item-card" *ngIf="build?.lightSpell; else lightSpellSkeleton">
-        <div class="item-label">
-          {{ build?.lightSpell?.name || "Light Spell" }}
-        </div>
+        <ng-template #r1Skeleton>
+          <div
+            class="item-card skeleton"
+            tabindex="0"
+            (click)="openDrawer('r1')"
+            (keydown.enter)="openDrawer('r1')"
+            (keydown.space)="openDrawer('r1')"
+          >
+            <div class="item-label">Firearm 1</div>
+          </div>
+        </ng-template>
         <div
-          class="item-img-container"
-          [ngStyle]="{
-            background: getElementBackground(build?.lightSpell?.element)
-          }"
+          class="item-card"
+          *ngIf="build?.secondRangedWeapon; else r2Skeleton"
+          tabindex="0"
+          (click)="openDrawer('r2')"
+          (keydown.enter)="openDrawer('r2')"
+          (keydown.space)="openDrawer('r2')"
         >
-          <img
-            *ngIf="build?.lightSpell?.image"
-            [src]="build?.lightSpell?.image"
-            alt="{{ build?.lightSpell?.name }}"
-          />
+          <div class="item-label">{{ build?.secondRangedWeapon?.name }}</div>
+          <div class="item-img-container">
+            <img
+              *ngIf="build?.secondRangedWeapon?.image"
+              [src]="build?.secondRangedWeapon?.image"
+              alt="{{ build?.secondRangedWeapon?.name }}"
+            />
+          </div>
+          <div
+            class="tile-element-dots"
+            *ngIf="build?.secondRangedWeapon?.element?.length"
+          >
+            <span
+              class="tile-element-dot"
+              *ngFor="let el of build?.secondRangedWeapon?.element"
+              [ngStyle]="{ backgroundColor: getElementColor(el) }"
+              [title]="getElementLabel(el)"
+            ></span>
+          </div>
+          <button
+            type="button"
+            class="tile-clear-btn"
+            aria-label="Clear"
+            title="Clear"
+            (click)="$event.stopPropagation(); clearSlot('r2')"
+          >
+            ✕
+          </button>
         </div>
-      </div>
-      <ng-template #lightSpellSkeleton>
-        <div class="item-card skeleton">
-          <div class="item-label">Light Spell</div>
-          <div class="item-img-container"></div>
-        </div>
-      </ng-template>
-    </div>
-    <div class="heavy-spell">
-      <div class="item-card" *ngIf="build?.heavySpell; else heavySpellSkeleton">
-        <div class="item-label">
-          {{ build?.heavySpell?.name || "Heavy Spell" }}
-        </div>
+        <ng-template #r2Skeleton>
+          <div
+            class="item-card skeleton"
+            tabindex="0"
+            (click)="openDrawer('r2')"
+            (keydown.enter)="openDrawer('r2')"
+            (keydown.space)="openDrawer('r2')"
+          >
+            <div class="item-label">Firearm 2</div>
+          </div>
+        </ng-template>
         <div
-          class="item-img-container"
-          [ngStyle]="{
-            background: getElementBackground(build?.heavySpell?.element)
-          }"
+          class="item-card"
+          *ngIf="build?.demonicWeapon; else rdSkeleton"
+          tabindex="0"
+          (click)="openDrawer('rd')"
+          (keydown.enter)="openDrawer('rd')"
+          (keydown.space)="openDrawer('rd')"
         >
-          <img
-            *ngIf="build?.heavySpell?.image"
-            [src]="build?.heavySpell?.image"
-            alt="{{ build?.heavySpell?.name }}"
-          />
+          <div class="item-label">{{ build?.demonicWeapon?.name }}</div>
+          <div class="item-img-container">
+            <img
+              *ngIf="build?.demonicWeapon?.image"
+              [src]="build?.demonicWeapon?.image"
+              alt="{{ build?.demonicWeapon?.name }}"
+            />
+          </div>
+          <div
+            class="tile-element-dots"
+            *ngIf="build?.demonicWeapon?.element?.length"
+          >
+            <span
+              class="tile-element-dot"
+              *ngFor="let el of build?.demonicWeapon?.element"
+              [ngStyle]="{ backgroundColor: getElementColor(el) }"
+              [title]="getElementLabel(el)"
+            ></span>
+          </div>
+          <button
+            type="button"
+            class="tile-clear-btn"
+            aria-label="Clear"
+            title="Clear"
+            (click)="$event.stopPropagation(); clearSlot('rd')"
+          >
+            ✕
+          </button>
+        </div>
+        <ng-template #rdSkeleton>
+          <div
+            class="item-card skeleton"
+            tabindex="0"
+            (click)="openDrawer('rd')"
+            (keydown.enter)="openDrawer('rd')"
+            (keydown.space)="openDrawer('rd')"
+          >
+            <div class="item-label">Demonic Weapon</div>
+          </div>
+        </ng-template>
+      </div>
+      <div class="melee-spells-items">
+        <div class="melee">
+          <div
+            class="item-card"
+            *ngIf="build?.meleeWeapon; else meleeSkeleton"
+            tabindex="0"
+            (click)="openDrawer('melee')"
+            (keydown.enter)="openDrawer('melee')"
+            (keydown.space)="openDrawer('melee')"
+          >
+            <div class="item-label">
+              {{ build?.meleeWeapon?.name || "Melee" }}
+            </div>
+            <div class="item-img-container">
+              <img
+                *ngIf="build?.meleeWeapon?.image"
+                [src]="build?.meleeWeapon?.image"
+                alt="{{ build?.meleeWeapon?.name }}"
+              />
+            </div>
+            <div
+              class="tile-element-dots"
+              *ngIf="build?.meleeWeapon?.element?.length"
+            >
+              <span
+                class="tile-element-dot"
+                *ngFor="let el of build?.meleeWeapon?.element"
+                [ngStyle]="{ backgroundColor: getElementColor(el) }"
+                [title]="getElementLabel(el)"
+              ></span>
+            </div>
+            <button
+              type="button"
+              class="tile-clear-btn"
+              aria-label="Clear"
+              title="Clear"
+              (click)="$event.stopPropagation(); clearSlot('melee')"
+            >
+              ✕
+            </button>
+          </div>
+          <ng-template #meleeSkeleton>
+            <div
+              class="item-card skeleton"
+              tabindex="0"
+              (click)="openDrawer('melee')"
+              (keydown.enter)="openDrawer('melee')"
+              (keydown.space)="openDrawer('melee')"
+            >
+              <div class="item-label">Melee</div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="light-spell">
+          <div
+            class="item-card"
+            *ngIf="build?.lightSpell; else lightSpellSkeleton"
+            tabindex="0"
+            (click)="openDrawer('ls')"
+            (keydown.enter)="openDrawer('ls')"
+            (keydown.space)="openDrawer('ls')"
+          >
+            <div class="item-label">
+              {{ build?.lightSpell?.name || "Light Spell" }}
+            </div>
+            <div class="item-img-container">
+              <img
+                *ngIf="build?.lightSpell?.image"
+                [src]="build?.lightSpell?.image"
+                alt="{{ build?.lightSpell?.name }}"
+              />
+            </div>
+            <div
+              class="tile-element-dots"
+              *ngIf="build?.lightSpell?.element?.length"
+            >
+              <span
+                class="tile-element-dot"
+                *ngFor="let el of build?.lightSpell?.element"
+                [ngStyle]="{ backgroundColor: getElementColor(el) }"
+                [title]="getElementLabel(el)"
+              ></span>
+            </div>
+            <button
+              type="button"
+              class="tile-clear-btn"
+              aria-label="Clear"
+              title="Clear"
+              (click)="$event.stopPropagation(); clearSlot('ls')"
+            >
+              ✕
+            </button>
+          </div>
+          <ng-template #lightSpellSkeleton>
+            <div
+              class="item-card skeleton"
+              tabindex="0"
+              (click)="openDrawer('ls')"
+              (keydown.enter)="openDrawer('ls')"
+              (keydown.space)="openDrawer('ls')"
+            >
+              <div class="item-label">Light Spell</div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="heavy-spell">
+          <div
+            class="item-card"
+            *ngIf="build?.heavySpell; else heavySpellSkeleton"
+            tabindex="0"
+            (click)="openDrawer('hs')"
+            (keydown.enter)="openDrawer('hs')"
+            (keydown.space)="openDrawer('hs')"
+          >
+            <div class="item-label">
+              {{ build?.heavySpell?.name || "Heavy Spell" }}
+            </div>
+            <div class="item-img-container">
+              <img
+                *ngIf="build?.heavySpell?.image"
+                [src]="build?.heavySpell?.image"
+                alt="{{ build?.heavySpell?.name }}"
+              />
+            </div>
+            <div
+              class="tile-element-dots"
+              *ngIf="build?.heavySpell?.element?.length"
+            >
+              <span
+                class="tile-element-dot"
+                *ngFor="let el of build?.heavySpell?.element"
+                [ngStyle]="{ backgroundColor: getElementColor(el) }"
+                [title]="getElementLabel(el)"
+              ></span>
+            </div>
+            <button
+              type="button"
+              class="tile-clear-btn"
+              aria-label="Clear"
+              title="Clear"
+              (click)="$event.stopPropagation(); clearSlot('hs')"
+            >
+              ✕
+            </button>
+          </div>
+          <ng-template #heavySpellSkeleton>
+            <div
+              class="item-card skeleton"
+              tabindex="0"
+              (click)="openDrawer('hs')"
+              (keydown.enter)="openDrawer('hs')"
+              (keydown.space)="openDrawer('hs')"
+            >
+              <div class="item-label">Heavy Spell</div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="relic">
+          <div
+            class="item-card"
+            *ngIf="build?.relic; else relicSkeleton"
+            tabindex="0"
+            (click)="openDrawer('relic')"
+            (keydown.enter)="openDrawer('relic')"
+            (keydown.space)="openDrawer('relic')"
+          >
+            <div class="item-label">{{ build?.relic?.name || "Relic" }}</div>
+            <div class="item-img-container">
+              <img
+                *ngIf="build?.relic?.image"
+                [src]="build?.relic?.image"
+                alt="{{ build?.relic?.name }}"
+              />
+            </div>
+            <div
+              class="tile-element-dots"
+              *ngIf="build?.relic?.element?.length"
+            >
+              <span
+                class="tile-element-dot"
+                *ngFor="let el of build?.relic?.element"
+                [ngStyle]="{ backgroundColor: getElementColor(el) }"
+                [title]="getElementLabel(el)"
+              ></span>
+            </div>
+            <button
+              type="button"
+              class="tile-clear-btn"
+              aria-label="Clear"
+              title="Clear"
+              (click)="$event.stopPropagation(); clearSlot('relic')"
+            >
+              ✕
+            </button>
+          </div>
+          <ng-template #relicSkeleton>
+            <div
+              class="item-card skeleton"
+              tabindex="0"
+              (click)="openDrawer('relic')"
+              (keydown.enter)="openDrawer('relic')"
+              (keydown.space)="openDrawer('relic')"
+            >
+              <div class="item-label">Relic</div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="fetish">
+          <div
+            class="item-card"
+            *ngIf="build?.fetish; else fetishSkeleton"
+            tabindex="0"
+            (click)="openDrawer('fetish')"
+            (keydown.enter)="openDrawer('fetish')"
+            (keydown.space)="openDrawer('fetish')"
+          >
+            <div class="item-label">{{ build?.fetish?.name || "Fetish" }}</div>
+            <div class="item-img-container">
+              <img
+                *ngIf="build?.fetish?.image"
+                [src]="build?.fetish?.image"
+                alt="{{ build?.fetish?.name }}"
+              />
+            </div>
+            <div
+              class="tile-element-dots"
+              *ngIf="build?.fetish?.element?.length"
+            >
+              <span
+                class="tile-element-dot"
+                *ngFor="let el of build?.fetish?.element"
+                [ngStyle]="{ backgroundColor: getElementColor(el) }"
+                [title]="getElementLabel(el)"
+              ></span>
+            </div>
+            <button
+              type="button"
+              class="tile-clear-btn"
+              aria-label="Clear"
+              title="Clear"
+              (click)="$event.stopPropagation(); clearSlot('fetish')"
+            >
+              ✕
+            </button>
+          </div>
+          <ng-template #fetishSkeleton>
+            <div
+              class="item-card skeleton"
+              tabindex="0"
+              (click)="openDrawer('fetish')"
+              (keydown.enter)="openDrawer('fetish')"
+              (keydown.space)="openDrawer('fetish')"
+            >
+              <div class="item-label">Fetish</div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="ring">
+          <div
+            class="item-card"
+            *ngIf="build?.ring; else ringSkeleton"
+            tabindex="0"
+            (click)="openDrawer('ring')"
+            (keydown.enter)="openDrawer('ring')"
+            (keydown.space)="openDrawer('ring')"
+          >
+            <div class="item-label">{{ build?.ring?.name || "Ring" }}</div>
+            <div class="item-img-container">
+              <img
+                *ngIf="build?.ring?.image"
+                [src]="build?.ring?.image"
+                alt="{{ build?.ring?.name }}"
+              />
+            </div>
+            <div class="tile-element-dots" *ngIf="build?.ring?.element?.length">
+              <span
+                class="tile-element-dot"
+                *ngFor="let el of build?.ring?.element"
+                [ngStyle]="{ backgroundColor: getElementColor(el) }"
+                [title]="getElementLabel(el)"
+              ></span>
+            </div>
+            <button
+              type="button"
+              class="tile-clear-btn"
+              aria-label="Clear"
+              title="Clear"
+              (click)="$event.stopPropagation(); clearSlot('ring')"
+            >
+              ✕
+            </button>
+          </div>
+          <ng-template #ringSkeleton>
+            <div
+              class="item-card skeleton"
+              tabindex="0"
+              (click)="openDrawer('ring')"
+              (keydown.enter)="openDrawer('ring')"
+              (keydown.space)="openDrawer('ring')"
+            >
+              <div class="item-label">Ring</div>
+            </div>
+          </ng-template>
         </div>
       </div>
-      <ng-template #heavySpellSkeleton>
-        <div class="item-card skeleton">
-          <div class="item-label">Heavy Spell</div>
-          <div class="item-img-container"></div>
-        </div>
-      </ng-template>
-    </div>
-    <div class="relic">
-      <div class="item-card" *ngIf="build?.relic; else relicSkeleton">
-        <div class="item-label">{{ build?.relic?.name || "Relic" }}</div>
+      <div class="beads">
+        <div class="column-title">Rosary Beads</div>
         <div
-          class="item-img-container"
-          [ngStyle]="{
-            background: getElementBackground(build?.relic?.element)
-          }"
+          class="bead-item"
+          *ngFor="let i of skeletonArray(beadSlots); let idx = index"
+          [class.skeleton]="!build?.rosaryBeads || !build?.rosaryBeads[idx]"
+          tabindex="0"
+          (click)="openDrawer('bead', idx)"
+          (keydown.enter)="openDrawer('bead', idx)"
+          (keydown.space)="openDrawer('bead', idx)"
         >
-          <img
-            *ngIf="build?.relic?.image"
-            [src]="build?.relic?.image"
-            alt="{{ build?.relic?.name }}"
-          />
+          <ng-container
+            *ngIf="
+              build?.rosaryBeads && build?.rosaryBeads[idx];
+              else beadSkeleton
+            "
+          >
+            <div class="item-img-container prophecy-bead-img">
+              <img
+                *ngIf="build?.rosaryBeads[idx]?.image"
+                [src]="build?.rosaryBeads[idx]?.image"
+                alt="{{ build?.rosaryBeads[idx]?.name }}"
+                style="width: 100%; height: auto; object-fit: contain"
+              />
+            </div>
+            <div class="bead-info">
+              <span class="bead-name">{{ build?.rosaryBeads[idx]?.name }}</span>
+              <span class="bead-effect">{{
+                build?.rosaryBeads[idx]?.effect
+              }}</span>
+              <div
+                class="bead-req-pills"
+                *ngIf="build?.rosaryBeads[idx]?.requirement as req"
+              >
+                <ng-container *ngIf="req.flesh">
+                  <span class="bead-pill">Flesh ({{ req.flesh }})</span>
+                </ng-container>
+                <ng-container *ngIf="req.blood">
+                  <span class="bead-pill">Blood ({{ req.blood }})</span>
+                </ng-container>
+                <ng-container *ngIf="req.mind">
+                  <span class="bead-pill">Mind ({{ req.mind }})</span>
+                </ng-container>
+                <ng-container *ngIf="req.witchery">
+                  <span class="bead-pill">Witchery ({{ req.witchery }})</span>
+                </ng-container>
+                <ng-container *ngIf="req.arsenal">
+                  <span class="bead-pill">Arsenal ({{ req.arsenal }})</span>
+                </ng-container>
+                <ng-container *ngIf="req.faith">
+                  <span class="bead-pill">Faith ({{ req.faith }})</span>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #beadSkeleton>
+            <div class="item-img-container prophecy-bead-img"></div>
+            <div class="bead-info">
+              <span class="skeleton-line w-80"></span>
+              <span class="skeleton-line w-60"></span>
+            </div>
+          </ng-template>
         </div>
       </div>
-      <ng-template #relicSkeleton>
-        <div class="item-card skeleton">
-          <div class="item-label">Relic</div>
-          <div class="item-img-container"></div>
-        </div>
-      </ng-template>
-    </div>
-    <div class="fetish">
-      <div class="item-card" *ngIf="build?.fetish; else fetishSkeleton">
-        <div class="item-label">{{ build?.fetish?.name || "Fetish" }}</div>
+      <div class="prophecies">
+        <div class="column-title">Prophecies</div>
         <div
-          class="item-img-container"
-          [ngStyle]="{
-            background: getElementBackground(build?.fetish?.element)
-          }"
+          class="prophecy-item"
+          *ngFor="let i of skeletonArray(prophecySlots); let idx = index"
+          [class.skeleton]="!build?.prophecies || !build?.prophecies[idx]"
+          tabindex="0"
+          (click)="openDrawer('prophecy', idx)"
+          (keydown.enter)="openDrawer('prophecy', idx)"
+          (keydown.space)="openDrawer('prophecy', idx)"
         >
-          <img
-            *ngIf="build?.fetish?.image"
-            [src]="build?.fetish?.image"
-            alt="{{ build?.fetish?.name }}"
-          />
+          <ng-container
+            *ngIf="
+              build?.prophecies && build?.prophecies[idx];
+              else prophecySkeleton
+            "
+          >
+            <div class="item-img-container prophecy-bead-img">
+              <img
+                *ngIf="build?.prophecies[idx]?.image"
+                [src]="build?.prophecies[idx]?.image"
+                alt="{{ build?.prophecies[idx]?.name }}"
+                style="width: 100%; height: auto; object-fit: contain"
+              />
+            </div>
+            <div class="prophecy-info">
+              <span class="prophecy-name">{{
+                build?.prophecies[idx]?.name
+              }}</span>
+              <span class="prophecy-omen">{{
+                build?.prophecies[idx]?.description
+              }}</span>
+            </div>
+          </ng-container>
+          <ng-template #prophecySkeleton>
+            <div class="item-img-container prophecy-bead-img"></div>
+            <div class="prophecy-info">
+              <span class="skeleton-line w-80"></span>
+              <span class="skeleton-line w-60"></span>
+            </div>
+          </ng-template>
         </div>
       </div>
-      <ng-template #fetishSkeleton>
-        <div class="item-card skeleton">
-          <div class="item-label">Fetish</div>
-          <div class="item-img-container"></div>
-        </div>
-      </ng-template>
     </div>
-    <div class="ring">
-      <div class="item-card" *ngIf="build?.ring; else ringSkeleton">
-        <div class="item-label">{{ build?.ring?.name || "Ring" }}</div>
-        <div
-          class="item-img-container"
-          [ngStyle]="{
-            background: getElementBackground(build?.ring?.element)
-          }"
-        >
-          <img
-            *ngIf="build?.ring?.image"
-            [src]="build?.ring?.image"
-            alt="{{ build?.ring?.name }}"
-          />
-        </div>
-      </div>
-      <ng-template #ringSkeleton>
-        <div class="item-card skeleton">
-          <div class="item-label">Ring</div>
-          <div class="item-img-container"></div>
-        </div>
-      </ng-template>
-    </div>
-  </div>
-  <div class="beads">
-    <div class="bead-item" *ngFor="let bead of build?.rosaryBeads">
-      <div class="item-img-container prophecy-bead-img">
-        <img
-          *ngIf="bead?.image"
-          [src]="bead?.image"
-          alt="{{ bead?.name }}"
-          style="width: 100%; height: auto; object-fit: contain"
-        />
-      </div>
-      <div class="bead-info">
-        <span class="bead-name">{{ bead.name }}</span>
-        <span class="bead-effect">{{ bead.effect }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="prophecies">
-    <div class="prophecy-item" *ngFor="let prophecy of build?.prophecies">
-      <div class="item-img-container prophecy-bead-img">
-        <img
-          *ngIf="prophecy?.image"
-          [src]="prophecy?.image"
-          alt="{{ prophecy?.name }}"
-          style="width: 100%; height: auto; object-fit: contain"
-        />
-      </div>
-      <div class="prophecy-info">
-        <span class="prophecy-name">{{ prophecy.name }}</span>
-        <span class="prophecy-omen">{{ prophecy.omen }}</span>
-      </div>
-    </div>
-  </div>
-</div>
+  </mat-drawer-content>
+</mat-drawer-container>
+
+<!-- Floating copy-URL button -->
+<button
+  *ngIf="!drawerOpen"
+  class="copy-url-fab"
+  aria-label="Copy build URL"
+  title="Copy URL"
+  tabindex="0"
+  (click)="copyShareUrl()"
+  (keydown.enter)="copyShareUrl()"
+  (keydown.space)="copyShareUrl($event)"
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <rect x="9" y="3" width="12" height="12" rx="2" ry="2" />
+    <rect x="3" y="9" width="12" height="12" rx="2" ry="2" />
+  </svg>
+  <span class="sr-only">Copy URL</span>
+</button>
 
 <!-- Helper: Element background rendering -->
 <ng-template #elementBg let-elements let-label="label">

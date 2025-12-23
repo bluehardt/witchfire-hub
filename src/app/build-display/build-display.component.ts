@@ -8,19 +8,37 @@ import { MAGICAL_ITEMS } from "../data/magical-items.data";
 import { ROSARY_BEADS } from "../data/rosary-beads.data";
 import { PROPHECIES } from "../data/prophecies.data";
 import { Build } from "../models/build.model";
-import { JsonPipe, NgForOf, NgIf, NgStyle } from "@angular/common";
+import { NgForOf, NgIf, NgStyle } from "@angular/common";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { FormsModule } from "@angular/forms";
 import { ElementType } from "../enums/element-type.enum";
+import { RosaryBeadRequirement } from "../models/rosary-bead.model";
+import { RangedWeaponCategory } from "../enums/ranged-weapon-category.enum";
+import { SpellType } from "../enums/spell-type.enum";
+// Removed SlotPicker imports
 
 @Component({
   selector: "app-build-display",
   standalone: true,
-  imports: [JsonPipe, NgForOf, NgIf, NgStyle],
+  imports: [
+    NgForOf,
+    NgIf,
+    NgStyle,
+    MatSidenavModule,
+    FormsModule,
+    MatSnackBarModule,
+  ],
   templateUrl: "./build-display.component.html",
   styleUrl: "./build-display.component.scss",
 })
 export class BuildDisplayComponent implements OnInit {
   buildString: string | null = null;
   build: Build | null = null;
+
+  // Fixed slot counts for UI layout
+  readonly beadSlots = 5;
+  readonly prophecySlots = 7;
 
   public rangedWeapons = RANGED_WEAPONS;
   public meleeWeapons = MELEE_WEAPONS;
@@ -29,7 +47,132 @@ export class BuildDisplayComponent implements OnInit {
   public rosaryBeads = ROSARY_BEADS;
   public prophecies = PROPHECIES;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  // Drawer state
+  drawerOpen = false;
+  drawerSlot: {
+    type:
+      | "r1"
+      | "r2"
+      | "rd"
+      | "melee"
+      | "ls"
+      | "hs"
+      | "relic"
+      | "fetish"
+      | "ring"
+      | "bead"
+      | "prophecy";
+    index?: number;
+  } | null = null;
+  searchTerm = "";
+
+  // Verbose title for the active drawer slot
+  get drawerTitle(): string {
+    if (!this.drawerSlot) return "";
+    const idx = (this.drawerSlot.index ?? 0) + 1;
+    switch (this.drawerSlot.type) {
+      case "r1":
+        return "Firearm 1";
+      case "r2":
+        return "Firearm 2";
+      case "rd":
+        return "Demonic Weapon";
+      case "melee":
+        return "Melee";
+      case "ls":
+        return "Light Spell";
+      case "hs":
+        return "Heavy Spell";
+      case "relic":
+        return "Relic";
+      case "fetish":
+        return "Fetish";
+      case "ring":
+        return "Ring";
+      case "bead":
+        return `Rosary Bead ${idx}`;
+      case "prophecy":
+        return `Prophecy ${idx}`;
+      default:
+        return "Select";
+    }
+  }
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {}
+
+  // Palette and labels used in gradients and element dots
+  private readonly elementColorsMap: Record<ElementType, string> = {
+    [ElementType.Fire]: "#a64b2a",
+    [ElementType.Earth]: "#3f4e33",
+    [ElementType.Water]: "#6ea5c9",
+    [ElementType.Air]: "#1f4fa8",
+  };
+  private readonly elementLabelsMap: Record<ElementType, string> = {
+    [ElementType.Fire]: "Fire",
+    [ElementType.Earth]: "Earth",
+    [ElementType.Water]: "Water",
+    [ElementType.Air]: "Air",
+  };
+
+  getElementColor(el: ElementType): string {
+    return this.elementColorsMap[el];
+  }
+
+  getElementLabel(el: ElementType): string {
+    return this.elementLabelsMap[el];
+  }
+
+  // Clear a specific top-level slot directly from a tile
+  clearSlot(
+    slot:
+      | "r1"
+      | "r2"
+      | "rd"
+      | "melee"
+      | "ls"
+      | "hs"
+      | "relic"
+      | "fetish"
+      | "ring"
+  ): void {
+    if (!this.build) return;
+    const b = { ...this.build } as Build;
+    switch (slot) {
+      case "r1":
+        b.firstRangedWeapon = null;
+        break;
+      case "r2":
+        b.secondRangedWeapon = null;
+        break;
+      case "rd":
+        b.demonicWeapon = null;
+        break;
+      case "melee":
+        b.meleeWeapon = null;
+        break;
+      case "ls":
+        b.lightSpell = null;
+        break;
+      case "hs":
+        b.heavySpell = null;
+        break;
+      case "relic":
+        b.relic = null;
+        break;
+      case "fetish":
+        b.fetish = null;
+        break;
+      case "ring":
+        b.ring = null;
+        break;
+    }
+    this.updateQueryParams(b);
+    this.build = b;
+  }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
@@ -40,12 +183,30 @@ export class BuildDisplayComponent implements OnInit {
     });
   }
 
+  // Removed temporary overlay picker helpers
   /**
    * Decodes a build from query parameters (preferred for readability).
    * Example: /build?r1=due&r2=fat&rd=vul&melee=mos&ls=bc&hs=bs&relic=bob&fetish=bal&ring=met&beads=aab,adb,aib&prophecies=ded,des
    * Omits empty/null slots.
    */
   parseBuildFromParams(params: any): Build {
+    const beadIds = (params.get("beads") || "").split(",");
+    const prophecyIds = (params.get("prophecies") || "").split(",");
+    const beads: ((typeof this.rosaryBeads)[number] | null)[] = Array.from(
+      { length: this.beadSlots },
+      (_, i) => {
+        const id = beadIds[i] || "";
+        return id ? this.rosaryBeads.find((b) => b.id === id) || null : null;
+      }
+    );
+    const props: ((typeof this.prophecies)[number] | null)[] = Array.from(
+      { length: this.prophecySlots },
+      (_, i) => {
+        const id = prophecyIds[i] || "";
+        return id ? this.prophecies.find((p) => p.id === id) || null : null;
+      }
+    );
+
     return {
       firstRangedWeapon:
         this.rangedWeapons.find((w) => w.id === params.get("r1")) || null,
@@ -62,16 +223,8 @@ export class BuildDisplayComponent implements OnInit {
       fetish:
         this.magicalItems.find((m) => m.id === params.get("fetish")) || null,
       ring: this.magicalItems.find((m) => m.id === params.get("ring")) || null,
-      rosaryBeads: (params.get("beads") || "")
-        .split(",")
-        .filter((id) => !!id)
-        .map((id) => this.rosaryBeads.find((b) => b.id === id))
-        .filter(Boolean) as any,
-      prophecies: (params.get("prophecies") || "")
-        .split(",")
-        .filter((id) => !!id)
-        .map((id) => this.prophecies.find((p) => p.id === id))
-        .filter(Boolean) as any,
+      rosaryBeads: beads,
+      prophecies: props,
     };
   }
 
@@ -93,10 +246,17 @@ export class BuildDisplayComponent implements OnInit {
     if (build.relic) params.push(`relic=${build.relic.id}`);
     if (build.fetish) params.push(`fetish=${build.fetish.id}`);
     if (build.ring) params.push(`ring=${build.ring.id}`);
-    if (build.rosaryBeads && build.rosaryBeads.length)
-      params.push(`beads=${build.rosaryBeads.map((b) => b.id).join(",")}`);
-    if (build.prophecies && build.prophecies.length)
-      params.push(`prophecies=${build.prophecies.map((p) => p.id).join(",")}`);
+    // Preserve slot positions for beads/prophecies using empty segments for nulls
+    const beads = Array.from(
+      { length: this.beadSlots },
+      (_, i) => build.rosaryBeads?.[i]?.id || ""
+    ).join(",");
+    const props = Array.from(
+      { length: this.prophecySlots },
+      (_, i) => build.prophecies?.[i]?.id || ""
+    ).join(",");
+    params.push(`beads=${beads}`);
+    params.push(`prophecies=${props}`);
     return params.join("&");
   }
 
@@ -156,37 +316,377 @@ export class BuildDisplayComponent implements OnInit {
       console.log("[getElementBackground] No elements, returning #222");
       return "#222";
     }
-    const elementColors: Record<ElementType, string> = {
-      [ElementType.Fire]: "#ff9800",
-      [ElementType.Earth]: "rgb(96 180 1)",
-      [ElementType.Water]: "#4fc3f7",
-      [ElementType.Air]: "#ffe082",
-    };
+    // Palette used for gradients
+    const elementColors = this.elementColorsMap;
     const valid = elements.filter((e) => !!elementColors[e]);
     console.log("[getElementBackground] valid:", valid);
     if (valid.length === 0) {
       console.log("[getElementBackground] No valid elements, returning #222");
       return "#222";
     }
+    const neutral = "#222"; // subtle base before element mark
     if (valid.length === 1) {
+      const color = elementColors[valid[0]];
       console.log(
         "[getElementBackground] Single element:",
         valid[0],
         "color:",
-        elementColors[valid[0]]
+        color
       );
-      return elementColors[valid[0]];
+      const base = 80; // neutral covers ~4/5
+      const usable = 20; // color occupies ~1/5
+      const blendStart = base + Math.min(8, usable * 0.35); // small blend into color region
+      const gradient = `linear-gradient(150deg, ${neutral} 0%, ${neutral} ${base}%, ${color} ${blendStart}%, ${color} 100%)`;
+      return `linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), ${gradient}`;
     }
-    // Multi-element: gradient
-    const gradient = `linear-gradient(-45deg, ${valid
-      .map(
-        (e, i) =>
-          `${elementColors[e]} ${(i * 100) / valid.length}% ${
-            ((i + 1) * 100) / valid.length
-          }%`
-      )
-      .join(", ")})`;
+    // Multi-element: neutral first ~3/4; first transition (neutral -> first color) smooth,
+    // subsequent color-to-color boundaries have a small, equal blur for clarity
+    const n = valid.length;
+    const usable = 20; // percent span for element colors (from base to 100%)
+    const base = 80; // start of color region (neutral before this)
+    const segment = usable / n;
+    const blendIn = Math.min(8, usable * 0.35, segment * 0.8); // smooth blend from neutral to first color
+    const blur = Math.max(1.5, Math.min(3, segment * 0.25)); // small equal blur for later boundaries
+    const stopsArr: string[] = [`${neutral} 0%`, `${neutral} ${base}%`];
+    for (let i = 0; i < n; i++) {
+      const color = elementColors[valid[i]];
+      const start = base + i * segment;
+      const end = base + (i + 1) * segment;
+      // Start of current color: smooth in only for the first color
+      if (i === 0) {
+        const startIn = Math.min(100, start + blendIn);
+        stopsArr.push(`${color} ${startIn}%`);
+      } else {
+        stopsArr.push(`${color} ${start}%`);
+      }
+      // Boundary handling:
+      // - For later boundaries, create a small blur spanning [end - blur, end]
+      // - For the last color, extend to 100%
+      if (i < n - 1) {
+        const cutoff = Math.max(start, end - blur);
+        stopsArr.push(`${color} ${cutoff}%`);
+        const nextColor = elementColors[valid[i + 1]];
+        stopsArr.push(`${nextColor} ${end}%`);
+      } else {
+        stopsArr.push(`${color} 100%`);
+      }
+    }
+    const gradient = `linear-gradient(150deg, ${stopsArr.join(", ")})`;
     console.log("[getElementBackground] Multi-element gradient:", gradient);
-    return gradient;
+    return `linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), ${gradient}`;
+  }
+
+  // Utility: create an array of a given length for skeleton ngFor
+  skeletonArray(count: number): number[] {
+    return Array.from({ length: count }, (_, i) => i);
+  }
+
+  // Utility: format Rosary Bead requirements like "Blood (20) · Faith (30)"
+  formatBeadRequirements(
+    req: RosaryBeadRequirement | undefined | null
+  ): string[] {
+    if (!req) return [];
+    const labels: Record<keyof RosaryBeadRequirement, string> = {
+      flesh: "Flesh",
+      blood: "Blood",
+      mind: "Mind",
+      witchery: "Witchery",
+      arsenal: "Arsenal",
+      faith: "Faith",
+    };
+    const keys = Object.keys(labels) as (keyof RosaryBeadRequirement)[];
+    return keys
+      .filter((k) => req[k] !== null && req[k] !== undefined)
+      .map((k) => `${labels[k]} (${req[k]})`);
+  }
+
+  // Open/close drawer helpers
+  openDrawer(
+    type:
+      | "r1"
+      | "r2"
+      | "rd"
+      | "melee"
+      | "ls"
+      | "hs"
+      | "relic"
+      | "fetish"
+      | "ring"
+      | "bead"
+      | "prophecy",
+    index?: number
+  ) {
+    this.drawerSlot = { type, index };
+    this.searchTerm = "";
+    this.drawerOpen = true;
+  }
+
+  closeDrawer() {
+    this.drawerOpen = false;
+  }
+
+  // Copy current build URL to clipboard
+  async copyShareUrl(ev?: Event) {
+    if (ev) ev.preventDefault();
+    try {
+      const base = `${location.origin}${location.pathname}#/build`;
+      const params = this.build
+        ? this.encodeBuildToQueryParams(this.build)
+        : "";
+      const url = params ? `${base}?${params}` : base;
+      await navigator.clipboard.writeText(url);
+      console.log("Copied URL:", url);
+      this.snackBar.open("URL copied to clipboard", undefined, {
+        duration: 2000,
+        verticalPosition: "bottom",
+        horizontalPosition: "center",
+        panelClass: ["snackbar-dark"],
+      });
+    } catch (e) {
+      // Fallback for environments without clipboard API
+      const base = `${location.origin}${location.pathname}#/build`;
+      const params = this.build
+        ? this.encodeBuildToQueryParams(this.build)
+        : "";
+      const url = params ? `${base}?${params}` : base;
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      console.log("Copied URL (fallback):", url);
+      this.snackBar.open("URL copied to clipboard", undefined, {
+        duration: 2000,
+        verticalPosition: "bottom",
+        horizontalPosition: "center",
+        panelClass: ["snackbar-dark"],
+      });
+    }
+  }
+
+  // Items for current slot with basic filtering + search
+  get currentItems(): any[] {
+    if (!this.drawerSlot) return [];
+    const term = this.searchTerm.trim().toLowerCase();
+    let items: any[] = [];
+    switch (this.drawerSlot.type) {
+      case "r1":
+      case "r2":
+        items = this.rangedWeapons.filter(
+          (w) => w.category !== RangedWeaponCategory.Demonic
+        );
+        break;
+      case "rd":
+        items = this.rangedWeapons.filter(
+          (w) => w.category === RangedWeaponCategory.Demonic
+        );
+        break;
+      case "melee":
+        items = this.meleeWeapons;
+        break;
+      case "ls":
+        items = this.spells.filter((s) => s.type === SpellType.Light);
+        break;
+      case "hs":
+        items = this.spells.filter((s) => s.type === SpellType.Heavy);
+        break;
+      case "relic":
+        items = this.magicalItems.filter((m) => m.type === "relic");
+        break;
+      case "fetish":
+        items = this.magicalItems.filter((m) => m.type === "fetish");
+        break;
+      case "ring":
+        items = this.magicalItems.filter((m) => m.type === "ring");
+        break;
+      case "bead":
+        items = this.rosaryBeads;
+        break;
+      case "prophecy":
+        items = this.prophecies;
+        break;
+    }
+    if (!term) return items;
+    return items.filter((i) => i.name.toLowerCase().includes(term));
+  }
+
+  // Current selection name for the active drawer slot (for clear button label)
+  get currentSelectionName(): string | null {
+    if (!this.build || !this.drawerSlot) return null;
+    switch (this.drawerSlot.type) {
+      case "r1":
+        return this.build.firstRangedWeapon?.name ?? null;
+      case "r2":
+        return this.build.secondRangedWeapon?.name ?? null;
+      case "rd":
+        return this.build.demonicWeapon?.name ?? null;
+      case "melee":
+        return this.build.meleeWeapon?.name ?? null;
+      case "ls":
+        return this.build.lightSpell?.name ?? null;
+      case "hs":
+        return this.build.heavySpell?.name ?? null;
+      case "relic":
+        return this.build.relic?.name ?? null;
+      case "fetish":
+        return this.build.fetish?.name ?? null;
+      case "ring":
+        return this.build.ring?.name ?? null;
+      case "bead":
+        if (this.drawerSlot.index !== undefined) {
+          return this.build.rosaryBeads?.[this.drawerSlot.index]?.name ?? null;
+        }
+        return null;
+      case "prophecy":
+        if (this.drawerSlot.index !== undefined) {
+          return this.build.prophecies?.[this.drawerSlot.index]?.name ?? null;
+        }
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  clearSelection() {
+    if (!this.build || !this.drawerSlot) return;
+    const b = { ...this.build } as Build;
+    switch (this.drawerSlot.type) {
+      case "r1":
+        b.firstRangedWeapon = null;
+        break;
+      case "r2":
+        b.secondRangedWeapon = null;
+        break;
+      case "rd":
+        b.demonicWeapon = null;
+        break;
+      case "melee":
+        b.meleeWeapon = null;
+        break;
+      case "ls":
+        b.lightSpell = null;
+        break;
+      case "hs":
+        b.heavySpell = null;
+        break;
+      case "relic":
+        b.relic = null;
+        break;
+      case "fetish":
+        b.fetish = null;
+        break;
+      case "ring":
+        b.ring = null;
+        break;
+      case "bead":
+        if (this.drawerSlot.index !== undefined) {
+          const arr = Array.from(
+            { length: this.beadSlots },
+            (_, i) => (b.rosaryBeads?.[i] ?? null) as any
+          );
+          arr[this.drawerSlot.index] = null as any;
+          b.rosaryBeads = arr as any;
+        }
+        break;
+      case "prophecy":
+        if (this.drawerSlot.index !== undefined) {
+          const arr = Array.from(
+            { length: this.prophecySlots },
+            (_, i) => (b.prophecies?.[i] ?? null) as any
+          );
+          arr[this.drawerSlot.index] = null as any;
+          b.prophecies = arr as any;
+        }
+        break;
+    }
+    this.updateQueryParams(b);
+    this.build = b;
+    this.closeDrawer();
+  }
+
+  selectItem(item: any) {
+    if (!this.build || !this.drawerSlot) return;
+    const b = { ...this.build } as Build;
+    switch (this.drawerSlot.type) {
+      case "r1":
+        b.firstRangedWeapon = item;
+        break;
+      case "r2":
+        b.secondRangedWeapon = item;
+        break;
+      case "rd":
+        b.demonicWeapon = item;
+        break;
+      case "melee":
+        b.meleeWeapon = item;
+        break;
+      case "ls":
+        b.lightSpell = item;
+        break;
+      case "hs":
+        b.heavySpell = item;
+        break;
+      case "relic":
+        b.relic = item;
+        break;
+      case "fetish":
+        b.fetish = item;
+        break;
+      case "ring":
+        b.ring = item;
+        break;
+      case "bead":
+        if (this.drawerSlot.index !== undefined) {
+          const arr = Array.from(
+            { length: this.beadSlots },
+            (_, i) => (b.rosaryBeads?.[i] ?? null) as any
+          );
+          arr[this.drawerSlot.index] = item;
+          b.rosaryBeads = arr as any;
+        }
+        break;
+      case "prophecy":
+        if (this.drawerSlot.index !== undefined) {
+          const arr = Array.from(
+            { length: this.prophecySlots },
+            (_, i) => (b.prophecies?.[i] ?? null) as any
+          );
+          arr[this.drawerSlot.index] = item;
+          b.prophecies = arr as any;
+        }
+        break;
+    }
+    this.updateQueryParams(b);
+    this.build = b;
+    this.closeDrawer();
+  }
+
+  private updateQueryParams(build: Build) {
+    const qp: any = {};
+    if (build.firstRangedWeapon) qp["r1"] = build.firstRangedWeapon.id;
+    if (build.secondRangedWeapon) qp["r2"] = build.secondRangedWeapon.id;
+    if (build.demonicWeapon) qp["rd"] = build.demonicWeapon.id;
+    if (build.meleeWeapon) qp["melee"] = build.meleeWeapon.id;
+    if (build.lightSpell) qp["ls"] = build.lightSpell.id;
+    if (build.heavySpell) qp["hs"] = build.heavySpell.id;
+    if (build.relic) qp["relic"] = build.relic.id;
+    if (build.fetish) qp["fetish"] = build.fetish.id;
+    if (build.ring) qp["ring"] = build.ring.id;
+
+    // Always encode beads/prophecies with fixed positions using empty segments for nulls
+    qp["beads"] = Array.from(
+      { length: this.beadSlots },
+      (_, i) => build.rosaryBeads?.[i]?.id || ""
+    ).join(",");
+    qp["prophecies"] = Array.from(
+      { length: this.prophecySlots },
+      (_, i) => build.prophecies?.[i]?.id || ""
+    ).join(",");
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: qp,
+      replaceUrl: true,
+    });
   }
 }

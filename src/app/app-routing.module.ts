@@ -5,6 +5,8 @@ import { BuildDisplayComponent } from "./build-display/build-display.component";
 const routes: Routes = [
   { path: "build", component: BuildDisplayComponent },
   { path: "", redirectTo: "/build", pathMatch: "full" },
+  // Fallback: any unknown route redirects to /build
+  { path: "**", redirectTo: "/build" },
 ];
 
 @NgModule({

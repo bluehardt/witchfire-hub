@@ -2,7 +2,6 @@
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
   grid-auto-rows: 1fr;
   gap: 16px;
   grid-auto-flow: row;
@@ -15,8 +14,11 @@
   margin-right: auto;
   padding-left: 1rem;
   padding-right: 1rem;
+  padding-top: 2rem;
   min-height: 600px;
 }
+
+// (Reverted desktop/laptop no-scroll constraints to restore previous behavior)
 
 // Tablet layout: stack sections in rows
 // Range: ~601px to ~1024px (avoid overlap with mobile)
@@ -49,6 +51,29 @@
     overflow-y: auto;
     padding: 0.5rem;
   }
+
+  // Treat tablets as mobile: small image containers and matching skeletons
+  .item-img-container {
+    width: 48px;
+    height: 48px;
+  }
+  .item-card.skeleton .item-label {
+    margin-bottom: 0.5rem;
+  }
+  .item-card.skeleton::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: transparent;
+    margin-top: 0.25rem;
+  }
+
+  // Hide tile clear buttons on tablet (touch)
+  .tile-clear-btn {
+    display: none !important;
+  }
 }
 
 // Mobile layout: single column stacked sections
@@ -63,11 +88,12 @@
       "melee-spells-items"
       "beads"
       "prophecies";
+    padding-top: 1rem;
   }
 
-  // Each ranged weapon occupies its own row
+  // Show three ranged weapons per row on small screens
   .ranged-weapons {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
   }
 
@@ -83,6 +109,25 @@
   .prophecies {
     overflow-y: auto;
     padding: 0.5rem;
+  }
+
+  // Hide tile clear buttons entirely on mobile (no hover on touch)
+  .tile-clear-btn {
+    display: none !important;
+  }
+
+  // Ensure skeleton tiles match filled tile height on mobile
+  .item-card.skeleton .item-label {
+    margin-bottom: 0.5rem; // match filled tiles
+  }
+  .item-card.skeleton::after {
+    content: "";
+    display: block;
+    width: 48px; // same as mobile image container
+    height: 48px;
+    border-radius: 8px;
+    background: transparent; // remove dashed border per feedback
+    margin-top: 0.25rem;
   }
 }
 // Grid Areas
@@ -127,7 +172,7 @@
 .beads {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
   grid-area: beads;
   overflow-y: auto;
   padding: 0.5rem;
@@ -136,10 +181,18 @@
 .prophecies {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
   grid-area: prophecies;
   overflow-y: auto;
   padding: 0.5rem;
+}
+
+// Column titles for beads and prophecies
+.column-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ccc;
+  margin: 0 0 0.25rem 0;
 }
 
 .item-img-container {
@@ -148,15 +201,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #222;
   border-radius: 8px;
   overflow: hidden;
 }
 .item-img-container img {
-  max-width: 100%;
+  max-width: 95%;
   max-height: 100%;
   object-fit: contain;
   display: block;
+  transition: transform 160ms ease;
+  will-change: transform;
 }
 
 .item-img-container.prophecy-bead-img {
@@ -190,10 +244,195 @@
   }
 }
 
+// Drawer styling
+.picker-drawer {
+  background: rgba(10, 10, 10, 0.95);
+  border-left: 1px solid #444;
+  box-shadow: -12px 0 24px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // keep header visible; scroll only the list area
+}
+
+// Ensure the drawer's own inner container doesn't scroll; we handle scrolling in the list area
+.picker-drawer .mat-drawer-inner-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+// Drawer list item clickable affordances
+.picker-drawer .drawer-item {
+  cursor: pointer;
+  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease,
+    background-color 0.1s ease;
+}
+.picker-drawer .drawer-item:hover {
+  border-color: #555;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+}
+.picker-drawer .drawer-item:active {
+  transform: scale(0.98);
+  border-color: #666;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
+}
+
+// Small header icon buttons to match drawer item styling
+.picker-drawer .icon-btn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #ccc;
+  cursor: pointer;
+  line-height: 1;
+  font-size: 1rem;
+  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease,
+    background-color 0.1s ease;
+}
+.picker-drawer .icon-btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  fill: none;
+}
+.picker-drawer .icon-btn:hover {
+  border-color: #555;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+}
+.picker-drawer .icon-btn:active {
+  transform: scale(0.98);
+  border-color: #666;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
+}
+.picker-drawer .icon-btn:focus-visible {
+  outline: 2px solid #888;
+  outline-offset: 2px;
+}
+
+/* Small ID tag in the top-right of drawer items */
+/* Inline header row for name + id chip */
+.picker-drawer .drawer-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.picker-drawer .drawer-item-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Element dots indicator on the right */
+.picker-drawer .element-dots {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: auto;
+  align-items: center;
+}
+.picker-drawer .element-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+}
+
+/* Dots overlay on big tiles (bottom-right) */
+.item-card {
+  position: relative;
+}
+.tile-element-dots {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  pointer-events: auto; /* allow hover tooltips */
+  z-index: 1;
+}
+.tile-element-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  cursor: help;
+}
+
+// Prevent unnecessary scrollbars on desktop where content fits
+.mat-drawer-content {
+  overflow: hidden;
+}
+
+/* Clear button shown on tile hover/focus; styled like header icon buttons */
+.tile-clear-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #444;
+  border-radius: 9999px; /* circle */
+  background: rgba(255, 255, 255, 0.04);
+  color: #ccc;
+  line-height: 1;
+  font-size: 1rem; /* keeps ✕ centered nicely */
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease,
+    background-color 0.1s ease, opacity 120ms ease, visibility 120ms ease;
+}
+.tile-clear-btn:hover {
+  border-color: #555;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+  color: #fff;
+}
+.tile-clear-btn:active {
+  transform: scale(0.98);
+  border-color: #666;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
+}
+.tile-clear-btn:focus-visible {
+  outline: 2px solid #888;
+  outline-offset: 2px;
+}
+.item-card:hover .tile-clear-btn,
+.item-card:focus-within .tile-clear-btn {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 600px) {
+  .mat-drawer-content {
+    overflow: auto; // allow scrolling on small screens if needed
+  }
+}
+
 // Utility for item label
 .item-label {
   text-align: center;
-  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+}
+
+// Center label within skeleton-only placeholders (no image container)
+.item-card.skeleton .item-label {
+  margin-bottom: 0;
 }
 
 // Item Cards
@@ -202,9 +441,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
+  /* Unify with neutral + overlay used in element gradients */
+  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), #222;
   border-radius: 8px;
   height: 100%;
+  border: 0; /* avoid transparent border seams with gradients */
+  background-clip: border-box;
+  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease;
 }
 
 // Bead and Prophecy Items
@@ -213,6 +456,15 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+}
+
+/* Subtle backdrop for bead thumbnails: background only, no inner border */
+.bead-item .item-img-container {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .bead-info,
@@ -221,6 +473,7 @@
   flex-direction: column;
   justify-content: center;
   flex: 1;
+  gap: 0.25rem;
 }
 
 .bead-name,
@@ -230,7 +483,176 @@
 }
 
 .bead-effect,
-.prophecy-omen {
+.prophecy-omen,
+.bead-requirements {
   font-size: 0.85rem;
   color: #888;
+}
+
+// Ensure requirements wrap nicely within the cell
+.bead-requirements {
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+// Requirement pills
+.bead-req-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0;
+}
+
+.bead-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #444;
+  color: #bbb;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+// Hover/focus states for button-like affordance
+.item-card[tabindex],
+.bead-item[tabindex],
+.prophecy-item[tabindex] {
+  cursor: pointer;
+}
+
+.item-card[tabindex]:hover,
+.bead-item[tabindex]:hover,
+.prophecy-item[tabindex]:hover {
+  border-color: #555;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+}
+
+.item-card[tabindex]:focus-visible,
+.bead-item[tabindex]:focus-visible,
+.prophecy-item[tabindex]:focus-visible {
+  outline: 2px solid #888;
+  outline-offset: 2px;
+}
+
+.item-img-container:hover img {
+  transform: scale(1.06);
+}
+
+// Also scale images when the clickable wrapper is hovered/focused
+.item-card[tabindex]:hover .item-img-container img,
+.bead-item[tabindex]:hover .item-img-container img,
+.prophecy-item[tabindex]:hover .item-img-container img,
+.item-card[tabindex]:focus-visible .item-img-container img,
+.bead-item[tabindex]:focus-visible .item-img-container img,
+.prophecy-item[tabindex]:focus-visible .item-img-container img {
+  transform: scale(1.06);
+}
+
+// Pressed/active state for clickable items
+.item-card[tabindex]:active,
+.bead-item[tabindex]:active,
+.prophecy-item[tabindex]:active {
+  transform: scale(0.98);
+  border-color: #666;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
+}
+
+// Skeleton variants for list items
+.bead-item.skeleton .item-img-container,
+.prophecy-item.skeleton .item-img-container {
+  background: transparent !important;
+  border: 2px dashed #444;
+}
+
+.skeleton-line {
+  display: block;
+  height: 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+.skeleton-line + .skeleton-line {
+  margin-top: 0.35rem;
+}
+.w-60 {
+  width: 60%;
+}
+.w-80 {
+  width: 80%;
+}
+
+// Floating copy URL button (FAB)
+.copy-url-fab {
+  position: fixed;
+  right: max(1rem, calc((100vw - 1440px) / 2 + 1rem));
+  bottom: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.95);
+  color: #eee;
+  border: 1px solid #444;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease,
+    background-color 0.1s ease;
+}
+.copy-url-fab svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+}
+.copy-url-fab:hover {
+  border-color: #555;
+  background: rgba(30, 30, 30, 0.98);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+}
+.copy-url-fab:active {
+  transform: scale(0.98);
+  border-color: #666;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) inset;
+}
+.copy-url-fab:focus-visible {
+  outline: 2px solid #888;
+  outline-offset: 2px;
+}
+
+// Scale FAB on larger viewports and keep it near content edge
+@media (min-width: 1600px) {
+  .copy-url-fab {
+    width: 64px;
+    height: 64px;
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .copy-url-fab {
+    width: 72px;
+    height: 72px;
+    font-size: 1.65rem;
+  }
+}
+
+// Screen-reader only helper
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

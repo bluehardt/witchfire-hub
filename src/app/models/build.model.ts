@@ -15,6 +15,6 @@ export interface Build {
   relic: MagicalItem | null;
   fetish: MagicalItem | null;
   ring: MagicalItem | null;
-  rosaryBeads: RosaryBead[];
-  prophecies: Prophecy[];
+  rosaryBeads: (RosaryBead | null)[];
+  prophecies: (Prophecy | null)[];
 }

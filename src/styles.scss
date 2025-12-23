@@ -1,9 +1,29 @@
+html {
+  font-size: 18px; // increase base size for rem scaling
+}
+
+@media (max-width: 600px) {
+  html {
+    font-size: 16px; // keep readability balanced on small screens
+  }
+}
+// Ensure Angular CDK overlays (snackbars, dialogs, etc.) are positioned correctly
+@import "@angular/cdk/overlay-prebuilt.css";
 /* You can add global styles to this file, and also import other style files */
 body {
   margin: 0;
   font-family: "IM Fell DW Pica", serif;
   background: #000;
   color: rgb(254 254 254);
+}
+
+// Ensure form controls inherit the app font and color
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
 }
 
 // Flex utilities
@@ -87,4 +107,33 @@ body {
     width: 48px;
     height: 48px;
   }
+}
+
+// Material drawer backdrop (overlay) tint
+.mat-drawer-backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Ensure the drawer's internal container doesn't scroll; only our list does */
+.picker-drawer .mat-drawer-inner-container {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+/* Belt-and-suspenders: prevent the drawer element from scrolling */
+.picker-drawer {
+  overflow: hidden !important;
+}
+
+/* Dark themed snackbar styling */
+.mat-mdc-snack-bar-container.snackbar-dark .mdc-snackbar__surface {
+  background: rgba(20, 20, 20, 0.98) !important;
+  color: #eee !important;
+  border: 1px solid #444;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+}
+.mat-mdc-snack-bar-container.snackbar-dark .mdc-snackbar__label {
+  color: #eee !important;
 }
