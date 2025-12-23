@@ -176,10 +176,9 @@
           class="item-card"
           *ngIf="build?.firstRangedWeapon; else r1Skeleton"
           tabindex="0"
-          (click)="openDrawer('r1')"
-          (keydown.enter)="openDrawer('r1')"
-          (keydown.space)="openDrawer('r1')"
-          
+          (click)="openDrawer('firearm1')"
+          (keydown.enter)="openDrawer('firearm1')"
+          (keydown.space)="openDrawer('firearm1')"
         >
           <div class="item-label">{{ build?.firstRangedWeapon?.name }}</div>
           <div class="item-img-container">
@@ -207,22 +206,21 @@
             aria-label="Clear"
             matTooltip="Clear"
             matTooltipPosition="above"
-            (click)="$event.stopPropagation(); clearSlot('r1')"
+            (click)="$event.stopPropagation(); clearSlot('firearm1')"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <line x1="6" y1="6" x2="18" y2="18"></line>
               <line x1="18" y1="6" x2="6" y2="18"></line>
             </svg>
           </button>
-          
         </div>
         <ng-template #r1Skeleton>
           <div
             class="item-card skeleton"
             tabindex="0"
-            (click)="openDrawer('r1')"
-            (keydown.enter)="openDrawer('r1')"
-            (keydown.space)="openDrawer('r1')"
+            (click)="openDrawer('firearm1')"
+            (keydown.enter)="openDrawer('firearm1')"
+            (keydown.space)="openDrawer('firearm1')"
           >
             <div class="item-label">Firearm 1</div>
           </div>
@@ -231,10 +229,9 @@
           class="item-card"
           *ngIf="build?.secondRangedWeapon; else r2Skeleton"
           tabindex="0"
-          (click)="openDrawer('r2')"
-          (keydown.enter)="openDrawer('r2')"
-          (keydown.space)="openDrawer('r2')"
-          
+          (click)="openDrawer('firearm2')"
+          (keydown.enter)="openDrawer('firearm2')"
+          (keydown.space)="openDrawer('firearm2')"
         >
           <div class="item-label">{{ build?.secondRangedWeapon?.name }}</div>
           <div class="item-img-container">
@@ -262,22 +259,21 @@
             aria-label="Clear"
             matTooltip="Clear"
             matTooltipPosition="above"
-            (click)="$event.stopPropagation(); clearSlot('r2')"
+            (click)="$event.stopPropagation(); clearSlot('firearm2')"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <line x1="6" y1="6" x2="18" y2="18"></line>
               <line x1="18" y1="6" x2="6" y2="18"></line>
             </svg>
           </button>
-          
         </div>
         <ng-template #r2Skeleton>
           <div
             class="item-card skeleton"
             tabindex="0"
-            (click)="openDrawer('r2')"
-            (keydown.enter)="openDrawer('r2')"
-            (keydown.space)="openDrawer('r2')"
+            (click)="openDrawer('firearm2')"
+            (keydown.enter)="openDrawer('firearm2')"
+            (keydown.space)="openDrawer('firearm2')"
           >
             <div class="item-label">Firearm 2</div>
           </div>
@@ -286,10 +282,9 @@
           class="item-card"
           *ngIf="build?.demonicWeapon; else rdSkeleton"
           tabindex="0"
-          (click)="openDrawer('rd')"
-          (keydown.enter)="openDrawer('rd')"
-          (keydown.space)="openDrawer('rd')"
-          
+          (click)="openDrawer('demonic')"
+          (keydown.enter)="openDrawer('demonic')"
+          (keydown.space)="openDrawer('demonic')"
         >
           <div class="item-label">{{ build?.demonicWeapon?.name }}</div>
           <div class="item-img-container">
@@ -317,22 +312,21 @@
             aria-label="Clear"
             matTooltip="Clear"
             matTooltipPosition="above"
-            (click)="$event.stopPropagation(); clearSlot('rd')"
+            (click)="$event.stopPropagation(); clearSlot('demonic')"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <line x1="6" y1="6" x2="18" y2="18"></line>
               <line x1="18" y1="6" x2="6" y2="18"></line>
             </svg>
           </button>
-          
         </div>
         <ng-template #rdSkeleton>
           <div
             class="item-card skeleton"
             tabindex="0"
-            (click)="openDrawer('rd')"
-            (keydown.enter)="openDrawer('rd')"
-            (keydown.space)="openDrawer('rd')"
+            (click)="openDrawer('demonic')"
+            (keydown.enter)="openDrawer('demonic')"
+            (keydown.space)="openDrawer('demonic')"
           >
             <div class="item-label">Demonic Weapon</div>
           </div>
@@ -347,7 +341,6 @@
             (click)="openDrawer('melee')"
             (keydown.enter)="openDrawer('melee')"
             (keydown.space)="openDrawer('melee')"
-            
           >
             <div class="item-label">
               {{ build?.meleeWeapon?.name || "Melee" }}
@@ -384,7 +377,6 @@
                 <line x1="18" y1="6" x2="6" y2="18"></line>
               </svg>
             </button>
-            
           </div>
           <ng-template #meleeSkeleton>
             <div
@@ -406,7 +398,6 @@
             (click)="openDrawer('ls')"
             (keydown.enter)="openDrawer('ls')"
             (keydown.space)="openDrawer('ls')"
-            
           >
             <div class="item-label">
               {{ build?.lightSpell?.name || "Light Spell" }}
@@ -443,7 +434,6 @@
                 <line x1="18" y1="6" x2="6" y2="18"></line>
               </svg>
             </button>
-            
           </div>
           <ng-template #lightSpellSkeleton>
             <div
@@ -465,7 +455,6 @@
             (click)="openDrawer('hs')"
             (keydown.enter)="openDrawer('hs')"
             (keydown.space)="openDrawer('hs')"
-            
           >
             <div class="item-label">
               {{ build?.heavySpell?.name || "Heavy Spell" }}
@@ -502,7 +491,6 @@
                 <line x1="18" y1="6" x2="6" y2="18"></line>
               </svg>
             </button>
-            
           </div>
           <ng-template #heavySpellSkeleton>
             <div
@@ -524,7 +512,6 @@
             (click)="openDrawer('relic')"
             (keydown.enter)="openDrawer('relic')"
             (keydown.space)="openDrawer('relic')"
-            
           >
             <div class="item-label">{{ build?.relic?.name || "Relic" }}</div>
             <div class="item-img-container">
@@ -559,7 +546,6 @@
                 <line x1="18" y1="6" x2="6" y2="18"></line>
               </svg>
             </button>
-            
           </div>
           <ng-template #relicSkeleton>
             <div
@@ -581,7 +567,6 @@
             (click)="openDrawer('fetish')"
             (keydown.enter)="openDrawer('fetish')"
             (keydown.space)="openDrawer('fetish')"
-            
           >
             <div class="item-label">{{ build?.fetish?.name || "Fetish" }}</div>
             <div class="item-img-container">
@@ -616,7 +601,6 @@
                 <line x1="18" y1="6" x2="6" y2="18"></line>
               </svg>
             </button>
-            
           </div>
           <ng-template #fetishSkeleton>
             <div
@@ -638,7 +622,6 @@
             (click)="openDrawer('ring')"
             (keydown.enter)="openDrawer('ring')"
             (keydown.space)="openDrawer('ring')"
-            
           >
             <div class="item-label">{{ build?.ring?.name || "Ring" }}</div>
             <div class="item-img-container">
@@ -670,7 +653,6 @@
                 <line x1="18" y1="6" x2="6" y2="18"></line>
               </svg>
             </button>
-            
           </div>
           <ng-template #ringSkeleton>
             <div
@@ -796,7 +778,7 @@
   </mat-drawer-content>
 </mat-drawer-container>
 
-<!-- Floating action: copy URL -->
+<!-- Floating copy-URL button -->
 <button
   *ngIf="!drawerOpen"
   class="copy-url-fab"
@@ -814,8 +796,6 @@
   </svg>
   <span class="sr-only">Copy URL</span>
 </button>
-
- 
 
 <!-- Helper: Element background rendering -->
 <ng-template #elementBg let-elements let-label="label">

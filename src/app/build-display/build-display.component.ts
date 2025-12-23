@@ -53,9 +53,9 @@ export class BuildDisplayComponent implements OnInit {
   drawerOpen = false;
   drawerSlot: {
     type:
-      | "r1"
-      | "r2"
-      | "rd"
+      | "firearm1"
+      | "firearm2"
+      | "demonic"
       | "melee"
       | "ls"
       | "hs"
@@ -73,11 +73,11 @@ export class BuildDisplayComponent implements OnInit {
     if (!this.drawerSlot) return "";
     const idx = (this.drawerSlot.index ?? 0) + 1;
     switch (this.drawerSlot.type) {
-      case "r1":
+      case "firearm1":
         return "Firearm 1";
-      case "r2":
+      case "firearm2":
         return "Firearm 2";
-      case "rd":
+      case "demonic":
         return "Demonic Weapon";
       case "melee":
         return "Melee";
@@ -131,9 +131,9 @@ export class BuildDisplayComponent implements OnInit {
   // Clear a specific top-level slot directly from a tile
   clearSlot(
     slot:
-      | "r1"
-      | "r2"
-      | "rd"
+      | "firearm1"
+      | "firearm2"
+      | "demonic"
       | "melee"
       | "ls"
       | "hs"
@@ -144,13 +144,13 @@ export class BuildDisplayComponent implements OnInit {
     if (!this.build) return;
     const b = { ...this.build } as Build;
     switch (slot) {
-      case "r1":
+      case "firearm1":
         b.firstRangedWeapon = null;
         break;
-      case "r2":
+      case "firearm2":
         b.secondRangedWeapon = null;
         break;
-      case "rd":
+      case "demonic":
         b.demonicWeapon = null;
         break;
       case "melee":
@@ -188,7 +188,7 @@ export class BuildDisplayComponent implements OnInit {
   // Removed temporary overlay picker helpers
   /**
    * Decodes a build from query parameters (preferred for readability).
-   * Example: /build?r1=due&r2=fat&rd=vul&melee=mos&ls=bc&hs=bs&relic=bob&fetish=bal&ring=met&beads=aab,adb,aib&prophecies=ded,des
+   * Example: /build?firearm1=due&firearm2=fat&demonic=vul&melee=mos&ls=bc&hs=bs&relic=bob&fetish=bal&ring=met&beads=aab,adb,aib&prophecies=ded,des
    * Omits empty/null slots.
    */
   parseBuildFromParams(params: any): Build {
@@ -209,13 +209,17 @@ export class BuildDisplayComponent implements OnInit {
       }
     );
 
+    // Read new keys only
+    const firearm1Id = params.get("firearm1");
+    const firearm2Id = params.get("firearm2");
+    const demonicId = params.get("demonic");
+
     return {
       firstRangedWeapon:
-        this.rangedWeapons.find((w) => w.id === params.get("r1")) || null,
+        this.rangedWeapons.find((w) => w.id === firearm1Id) || null,
       secondRangedWeapon:
-        this.rangedWeapons.find((w) => w.id === params.get("r2")) || null,
-      demonicWeapon:
-        this.rangedWeapons.find((w) => w.id === params.get("rd")) || null,
+        this.rangedWeapons.find((w) => w.id === firearm2Id) || null,
+      demonicWeapon: this.rangedWeapons.find((w) => w.id === demonicId) || null,
       meleeWeapon:
         this.meleeWeapons.find((w) => w.id === params.get("melee")) || null,
       lightSpell: this.spells.find((s) => s.id === params.get("ls")) || null,
@@ -233,15 +237,15 @@ export class BuildDisplayComponent implements OnInit {
   /**
    * Encodes a Build object into a query param string for sharing.
    * Omits empty/null slots for brevity.
-   * Example output: r1=due&r2=fat&melee=mos&beads=aab,adb&prophecies=ded,des
+   * Example output: firearm1=due&firearm2=fat&melee=mos&beads=aab,adb&prophecies=ded,des
    */
   encodeBuildToQueryParams(build: Build): string {
     const params: string[] = [];
     if (build.firstRangedWeapon)
-      params.push(`r1=${build.firstRangedWeapon.id}`);
+      params.push(`firearm1=${build.firstRangedWeapon.id}`);
     if (build.secondRangedWeapon)
-      params.push(`r2=${build.secondRangedWeapon.id}`);
-    if (build.demonicWeapon) params.push(`rd=${build.demonicWeapon.id}`);
+      params.push(`firearm2=${build.secondRangedWeapon.id}`);
+    if (build.demonicWeapon) params.push(`demonic=${build.demonicWeapon.id}`);
     if (build.meleeWeapon) params.push(`melee=${build.meleeWeapon.id}`);
     if (build.lightSpell) params.push(`ls=${build.lightSpell.id}`);
     if (build.heavySpell) params.push(`hs=${build.heavySpell.id}`);
@@ -405,9 +409,9 @@ export class BuildDisplayComponent implements OnInit {
   // Open/close drawer helpers
   openDrawer(
     type:
-      | "r1"
-      | "r2"
-      | "rd"
+      | "firearm1"
+      | "firearm2"
+      | "demonic"
       | "melee"
       | "ls"
       | "hs"
@@ -473,13 +477,13 @@ export class BuildDisplayComponent implements OnInit {
     const term = this.searchTerm.trim().toLowerCase();
     let items: any[] = [];
     switch (this.drawerSlot.type) {
-      case "r1":
-      case "r2":
+      case "firearm1":
+      case "firearm2":
         items = this.rangedWeapons.filter(
           (w) => w.category !== RangedWeaponCategory.Demonic
         );
         break;
-      case "rd":
+      case "demonic":
         items = this.rangedWeapons.filter(
           (w) => w.category === RangedWeaponCategory.Demonic
         );
@@ -517,11 +521,11 @@ export class BuildDisplayComponent implements OnInit {
   get currentSelectionName(): string | null {
     if (!this.build || !this.drawerSlot) return null;
     switch (this.drawerSlot.type) {
-      case "r1":
+      case "firearm1":
         return this.build.firstRangedWeapon?.name ?? null;
-      case "r2":
+      case "firearm2":
         return this.build.secondRangedWeapon?.name ?? null;
-      case "rd":
+      case "demonic":
         return this.build.demonicWeapon?.name ?? null;
       case "melee":
         return this.build.meleeWeapon?.name ?? null;
@@ -554,13 +558,13 @@ export class BuildDisplayComponent implements OnInit {
     if (!this.build || !this.drawerSlot) return;
     const b = { ...this.build } as Build;
     switch (this.drawerSlot.type) {
-      case "r1":
+      case "firearm1":
         b.firstRangedWeapon = null;
         break;
-      case "r2":
+      case "firearm2":
         b.secondRangedWeapon = null;
         break;
-      case "rd":
+      case "demonic":
         b.demonicWeapon = null;
         break;
       case "melee":
@@ -611,13 +615,13 @@ export class BuildDisplayComponent implements OnInit {
     if (!this.build || !this.drawerSlot) return;
     const b = { ...this.build } as Build;
     switch (this.drawerSlot.type) {
-      case "r1":
+      case "firearm1":
         b.firstRangedWeapon = item;
         break;
-      case "r2":
+      case "firearm2":
         b.secondRangedWeapon = item;
         break;
-      case "rd":
+      case "demonic":
         b.demonicWeapon = item;
         break;
       case "melee":
@@ -666,9 +670,9 @@ export class BuildDisplayComponent implements OnInit {
 
   private updateQueryParams(build: Build) {
     const qp: any = {};
-    if (build.firstRangedWeapon) qp["r1"] = build.firstRangedWeapon.id;
-    if (build.secondRangedWeapon) qp["r2"] = build.secondRangedWeapon.id;
-    if (build.demonicWeapon) qp["rd"] = build.demonicWeapon.id;
+    if (build.firstRangedWeapon) qp["firearm1"] = build.firstRangedWeapon.id;
+    if (build.secondRangedWeapon) qp["firearm2"] = build.secondRangedWeapon.id;
+    if (build.demonicWeapon) qp["demonic"] = build.demonicWeapon.id;
     if (build.meleeWeapon) qp["melee"] = build.meleeWeapon.id;
     if (build.lightSpell) qp["ls"] = build.lightSpell.id;
     if (build.heavySpell) qp["hs"] = build.heavySpell.id;
