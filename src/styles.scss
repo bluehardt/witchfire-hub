@@ -145,3 +145,30 @@ textarea {
 .mat-mdc-snack-bar-container.snackbar-dark .mdc-snackbar__label {
   color: #eee !important;
 }
+
+/* Improve tooltip readability: subtle dark background, border, smaller font */
+/* Angular Material v17 (MDC) tooltip: set MDC CSS variables on panel */
+.mat-mdc-tooltip-panel {
+  --mdc-plain-tooltip-container-color: rgba(20, 20, 20, 0.92);
+  --mdc-plain-tooltip-supporting-text-color: #eee;
+}
+/* Style tooltip surface for border, radius, padding, font size */
+.mat-mdc-tooltip-panel .mdc-tooltip__surface,
+.mat-mdc-tooltip-panel .mat-mdc-tooltip-surface {
+  border: 1px solid #444 !important;
+  border-radius: 6px !important;
+  padding: 6px 8px !important;
+  font-size: 0.85rem !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  white-space: pre-line; /* preserve new lines in tooltip text */
+}
+/* Legacy (non-MDC) selector fallback, in case */
+.mat-tooltip {
+  background: rgba(20, 20, 20, 0.92) !important;
+  color: #eee !important;
+  border: 1px solid #444 !important;
+  border-radius: 6px !important;
+  padding: 6px 8px !important;
+  font-size: 0.85rem !important;
+  white-space: pre-line; /* preserve new lines in legacy tooltips */
+}

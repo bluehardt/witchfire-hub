@@ -204,6 +204,22 @@ mat-drawer-content {
   padding-bottom: 0;
 }
 
+/* Incense now renders inside the prophecies area at the bottom */
+/* When incense is set, use the same neutral tile background as major tiles */
+.prophecies .prophecy-item.incense-entry:not(.skeleton) {
+  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), #222;
+}
+
+/* Position clear button within incense row and show on hover/focus */
+.prophecies .prophecy-item.incense-entry {
+  position: relative;
+}
+.prophecies .prophecy-item.incense-entry:hover .tile-clear-btn,
+.prophecies .prophecy-item.incense-entry:focus-within .tile-clear-btn {
+  opacity: 1;
+  visibility: visible;
+}
+
 // Column titles for beads and prophecies
 .column-title {
   font-size: 1rem;
@@ -403,8 +419,8 @@ mat-drawer-content {
   position: absolute;
   top: 8px;
   right: 8px;
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -449,8 +465,8 @@ mat-drawer-content {
 }
 
 .tile-clear-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   display: block;
   stroke: currentColor;
   stroke-width: 1.6;
@@ -481,6 +497,9 @@ mat-drawer-content {
   background-clip: border-box;
   transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease;
 }
+
+/* Make incense tile match bead-item sizing while keeping item-card styling */
+/* Incense tile uses existing prophecy-item sizing and styles */
 
 // Bead and Prophecy Items
 .bead-item,
@@ -533,6 +552,24 @@ mat-drawer-content {
   flex-wrap: wrap;
   gap: 0.375rem;
   margin-top: 0;
+}
+/* Default: hide tile bead requirement chips on desktop/laptop; use tooltips */
+.beads .bead-req-pills {
+  display: none;
+}
+
+/* Tablet: show bead requirement chips on tiles */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .beads .bead-req-pills {
+    display: flex;
+  }
+}
+
+/* Mobile: show bead requirement chips on tiles */
+@media (max-width: 600px) {
+  .beads .bead-req-pills {
+    display: flex;
+  }
 }
 
 .bead-pill {
@@ -590,12 +627,31 @@ mat-drawer-content {
   border-color: #666;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
 }
+.bead-item,
+.prophecy-item {
+  position: relative;
+}
+.bead-item:hover .tile-clear-btn,
+.bead-item:focus-within .tile-clear-btn,
+.prophecy-item:hover .tile-clear-btn,
+.prophecy-item:focus-within .tile-clear-btn {
+  opacity: 1;
+  visibility: visible;
+}
 
 // Skeleton variants for list items
 .bead-item.skeleton .item-img-container,
 .prophecy-item.skeleton .item-img-container {
   background: transparent !important;
   border: 2px dashed #444;
+}
+
+/* Incense skeleton should look like non-list item-card skeleton while keeping bead-sized layout */
+.prophecies .prophecy-item.incense-entry.skeleton {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 2px dashed #444;
+  border-radius: 8px;
+  min-height: 80px; /* match bead/prophecy image container height */
 }
 
 .skeleton-line {

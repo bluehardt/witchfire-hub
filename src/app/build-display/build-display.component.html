@@ -677,6 +677,10 @@
           (click)="openDrawer('bead', idx)"
           (keydown.enter)="openDrawer('bead', idx)"
           (keydown.space)="openDrawer('bead', idx)"
+          [matTooltip]="getBeadTooltip(idx)"
+          matTooltipPosition="above"
+          matTooltipClass="tooltip-rich"
+          [matTooltipDisabled]="!isDesktop"
         >
           <ng-container
             *ngIf="
@@ -697,6 +701,7 @@
               <span class="bead-effect">{{
                 build?.rosaryBeads[idx]?.effect
               }}</span>
+              <!-- Requirements chips: visible on tablet/mobile; hidden on desktop via CSS -->
               <div
                 class="bead-req-pills"
                 *ngIf="build?.rosaryBeads[idx]?.requirement as req"
@@ -721,6 +726,19 @@
                 </ng-container>
               </div>
             </div>
+            <button
+              type="button"
+              class="tile-clear-btn"
+              aria-label="Clear"
+              matTooltip="Clear"
+              matTooltipPosition="above"
+              (click)="$event.stopPropagation(); clearBead(idx)"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+              </svg>
+            </button>
           </ng-container>
           <ng-template #beadSkeleton>
             <div class="item-img-container prophecy-bead-img"></div>
@@ -763,6 +781,19 @@
               <span class="prophecy-omen">{{
                 build?.prophecies[idx]?.description
               }}</span>
+              <button
+                type="button"
+                class="tile-clear-btn"
+                aria-label="Clear"
+                matTooltip="Clear"
+                matTooltipPosition="above"
+                (click)="$event.stopPropagation(); clearProphecy(idx)"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                </svg>
+              </button>
             </div>
           </ng-container>
           <ng-template #prophecySkeleton>
@@ -770,6 +801,53 @@
             <div class="prophecy-info">
               <span class="skeleton-line w-80"></span>
               <span class="skeleton-line w-60"></span>
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- Incense tile at bottom of prophecies column -->
+        <div
+          class="prophecy-item incense-entry"
+          [class.skeleton]="!build?.incense"
+          tabindex="0"
+          (click)="openDrawer('incense')"
+          (keydown.enter)="openDrawer('incense')"
+          (keydown.space)="openDrawer('incense')"
+        >
+          <ng-container *ngIf="build?.incense; else incenseSkeletonInline">
+            <div class="item-img-container prophecy-bead-img">
+              <img
+                *ngIf="build?.incense?.image"
+                [src]="build?.incense?.image"
+                alt="{{ build?.incense?.name }}"
+                style="width: 100%; height: auto; object-fit: contain"
+              />
+            </div>
+            <div class="prophecy-info">
+              <span class="prophecy-name">{{
+                build?.incense?.name || "Incense"
+              }}</span>
+              <span class="prophecy-omen" *ngIf="build?.incense?.description">
+                {{ build?.incense?.description }}
+              </span>
+            </div>
+            <button
+              type="button"
+              class="tile-clear-btn"
+              aria-label="Clear"
+              matTooltip="Clear"
+              matTooltipPosition="above"
+              (click)="$event.stopPropagation(); clearSlot('incense')"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+              </svg>
+            </button>
+          </ng-container>
+          <ng-template #incenseSkeletonInline>
+            <div class="prophecy-info">
+              <span class="item-label">Incense</span>
             </div>
           </ng-template>
         </div>

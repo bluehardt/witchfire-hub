@@ -1,10 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, HostListener } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Router, UrlSegment } from "@angular/router";
 import { MELEE_WEAPONS } from "../data/melee-weapons.data";
 import { RANGED_WEAPONS } from "../data/ranged-weapons.data";
 import { SPELLS } from "../data/spells.data";
 import { MAGICAL_ITEMS } from "../data/magical-items.data";
+import { INCENSES } from "../data/incenses.data";
 import { ROSARY_BEADS } from "../data/rosary-beads.data";
 import { PROPHECIES } from "../data/prophecies.data";
 import { Build } from "../models/build.model";
@@ -37,6 +38,8 @@ import { SpellType } from "../enums/spell-type.enum";
 export class BuildDisplayComponent implements OnInit {
   buildString: string | null = null;
   build: Build | null = null;
+  // Enable tooltips only on laptop/desktop (>1024px)
+  isDesktop: boolean = window.innerWidth > 1024;
 
   // Fixed slot counts for UI layout
   readonly beadSlots = 5;
@@ -46,6 +49,7 @@ export class BuildDisplayComponent implements OnInit {
   public meleeWeapons = MELEE_WEAPONS;
   public spells = SPELLS;
   public magicalItems = MAGICAL_ITEMS;
+  public incenses = INCENSES;
   public rosaryBeads = ROSARY_BEADS;
   public prophecies = PROPHECIES;
 
@@ -62,6 +66,7 @@ export class BuildDisplayComponent implements OnInit {
       | "relic"
       | "fetish"
       | "ring"
+      | "incense"
       | "bead"
       | "prophecy";
     index?: number;
@@ -91,6 +96,8 @@ export class BuildDisplayComponent implements OnInit {
         return "Fetish";
       case "ring":
         return "Ring";
+      case "incense":
+        return "Incense";
       case "bead":
         return `Rosary Bead ${idx}`;
       case "prophecy":
@@ -140,6 +147,7 @@ export class BuildDisplayComponent implements OnInit {
       | "relic"
       | "fetish"
       | "ring"
+      | "incense"
   ): void {
     if (!this.build) return;
     const b = { ...this.build } as Build;
@@ -170,6 +178,9 @@ export class BuildDisplayComponent implements OnInit {
         break;
       case "ring":
         b.ring = null;
+        break;
+      case "incense":
+        b.incense = null;
         break;
     }
     this.updateQueryParams(b);
@@ -213,6 +224,7 @@ export class BuildDisplayComponent implements OnInit {
     const firearm1Id = params.get("firearm1");
     const firearm2Id = params.get("firearm2");
     const demonicId = params.get("demonic");
+    const incenseId = params.get("incense");
 
     return {
       firstRangedWeapon:
@@ -229,6 +241,7 @@ export class BuildDisplayComponent implements OnInit {
       fetish:
         this.magicalItems.find((m) => m.id === params.get("fetish")) || null,
       ring: this.magicalItems.find((m) => m.id === params.get("ring")) || null,
+      incense: this.incenses.find((i) => i.id === incenseId) || null,
       rosaryBeads: beads,
       prophecies: props,
     };
@@ -252,6 +265,7 @@ export class BuildDisplayComponent implements OnInit {
     if (build.relic) params.push(`relic=${build.relic.id}`);
     if (build.fetish) params.push(`fetish=${build.fetish.id}`);
     if (build.ring) params.push(`ring=${build.ring.id}`);
+    if (build.incense) params.push(`incense=${build.incense.id}`);
     // Preserve slot positions for beads/prophecies using empty segments for nulls
     const beads = Array.from(
       { length: this.beadSlots },
@@ -305,6 +319,7 @@ export class BuildDisplayComponent implements OnInit {
       relic: MAGICAL_ITEMS.find((m) => m.id === relicId) || null,
       fetish: MAGICAL_ITEMS.find((m) => m.id === fetishId) || null,
       ring: MAGICAL_ITEMS.find((m) => m.id === ringId) || null,
+      incense: null,
       rosaryBeads: rosaryBeadIds
         .map((id) => ROSARY_BEADS.find((b) => b.id === id))
         .filter(Boolean) as any,
@@ -406,6 +421,14 @@ export class BuildDisplayComponent implements OnInit {
       .map((k) => `${labels[k]} (${req[k]})`);
   }
 
+  // Tooltip text for bead tiles: one requirement per line
+  getBeadTooltip(idx: number): string | null {
+    const req = this.build?.rosaryBeads?.[idx]?.requirement;
+    if (!req) return null;
+    const lines = this.formatBeadRequirements(req);
+    return lines.length ? lines.join("\n") : null;
+  }
+
   // Open/close drawer helpers
   openDrawer(
     type:
@@ -418,6 +441,7 @@ export class BuildDisplayComponent implements OnInit {
       | "relic"
       | "fetish"
       | "ring"
+      | "incense"
       | "bead"
       | "prophecy",
     index?: number
@@ -429,6 +453,11 @@ export class BuildDisplayComponent implements OnInit {
 
   closeDrawer() {
     this.drawerOpen = false;
+  }
+
+  @HostListener("window:resize")
+  onResize() {
+    this.isDesktop = window.innerWidth > 1024;
   }
 
   // Copy current build URL to clipboard
@@ -471,6 +500,34 @@ export class BuildDisplayComponent implements OnInit {
     }
   }
 
+  // Clear specific bead slot from tile button
+  clearBead(index: number): void {
+    if (!this.build) return;
+    const b = { ...this.build } as Build;
+    const arr = Array.from(
+      { length: this.beadSlots },
+      (_, i) => (b.rosaryBeads?.[i] ?? null) as any
+    );
+    arr[index] = null as any;
+    b.rosaryBeads = arr as any;
+    this.updateQueryParams(b);
+    this.build = b;
+  }
+
+  // Clear specific prophecy slot from tile button
+  clearProphecy(index: number): void {
+    if (!this.build) return;
+    const b = { ...this.build } as Build;
+    const arr = Array.from(
+      { length: this.prophecySlots },
+      (_, i) => (b.prophecies?.[i] ?? null) as any
+    );
+    arr[index] = null as any;
+    b.prophecies = arr as any;
+    this.updateQueryParams(b);
+    this.build = b;
+  }
+
   // Items for current slot with basic filtering + search
   get currentItems(): any[] {
     if (!this.drawerSlot) return [];
@@ -506,6 +563,9 @@ export class BuildDisplayComponent implements OnInit {
       case "ring":
         items = this.magicalItems.filter((m) => m.type === "ring");
         break;
+      case "incense":
+        items = this.incenses;
+        break;
       case "bead":
         items = this.rosaryBeads;
         break;
@@ -539,6 +599,8 @@ export class BuildDisplayComponent implements OnInit {
         return this.build.fetish?.name ?? null;
       case "ring":
         return this.build.ring?.name ?? null;
+      case "incense":
+        return this.build.incense?.name ?? null;
       case "bead":
         if (this.drawerSlot.index !== undefined) {
           return this.build.rosaryBeads?.[this.drawerSlot.index]?.name ?? null;
@@ -584,6 +646,9 @@ export class BuildDisplayComponent implements OnInit {
         break;
       case "ring":
         b.ring = null;
+        break;
+      case "incense":
+        b.incense = null;
         break;
       case "bead":
         if (this.drawerSlot.index !== undefined) {
@@ -642,6 +707,9 @@ export class BuildDisplayComponent implements OnInit {
       case "ring":
         b.ring = item;
         break;
+      case "incense":
+        b.incense = item;
+        break;
       case "bead":
         if (this.drawerSlot.index !== undefined) {
           const arr = Array.from(
@@ -679,6 +747,7 @@ export class BuildDisplayComponent implements OnInit {
     if (build.relic) qp["relic"] = build.relic.id;
     if (build.fetish) qp["fetish"] = build.fetish.id;
     if (build.ring) qp["ring"] = build.ring.id;
+    if (build.incense) qp["incense"] = build.incense.id;
 
     // Always encode beads/prophecies with fixed positions using empty segments for nulls
     qp["beads"] = Array.from(
