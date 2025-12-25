@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Router, UrlSegment } from "@angular/router";
+import { Router } from "@angular/router";
 import { MELEE_WEAPONS } from "../data/melee-weapons.data";
 import { RANGED_WEAPONS } from "../data/ranged-weapons.data";
 import { SPELLS } from "../data/spells.data";
@@ -18,7 +18,7 @@ import { ElementType } from "../enums/element-type.enum";
 import { RosaryBeadRequirement } from "../models/rosary-bead.model";
 import { RangedWeaponCategory } from "../enums/ranged-weapon-category.enum";
 import { SpellType } from "../enums/spell-type.enum";
-// Removed SlotPicker imports
+// Main build display component for composing and sharing builds
 
 @Component({
   selector: "app-build-display",
@@ -36,7 +36,6 @@ import { SpellType } from "../enums/spell-type.enum";
   styleUrl: "./build-display.component.scss",
 })
 export class BuildDisplayComponent implements OnInit {
-  buildString: string | null = null;
   build: Build | null = null;
   // Enable tooltips only on laptop/desktop (>1024px)
   isDesktop: boolean = window.innerWidth > 1024;
@@ -153,10 +152,10 @@ export class BuildDisplayComponent implements OnInit {
     const b = { ...this.build } as Build;
     switch (slot) {
       case "firearm1":
-        b.firstRangedWeapon = null;
+        b.firearm1 = null;
         break;
       case "firearm2":
-        b.secondRangedWeapon = null;
+        b.firearm2 = null;
         break;
       case "demonic":
         b.demonicWeapon = null;
@@ -192,14 +191,12 @@ export class BuildDisplayComponent implements OnInit {
       // Read all build slots from query params, omitting missing ones
       const build = this.parseBuildFromParams(params);
       this.build = build;
-      console.log("Parsed build from query params:", this.build);
     });
   }
 
-  // Removed temporary overlay picker helpers
+  // Query param decoding/encoding helpers
   /**
    * Decodes a build from query parameters (preferred for readability).
-   * Example: /build?firearm1=due&firearm2=fat&demonic=vul&melee=mos&ls=bc&hs=bs&relic=bob&fetish=bal&ring=met&beads=aab,adb,aib&prophecies=ded,des
    * Omits empty/null slots.
    */
   parseBuildFromParams(params: any): Build {
@@ -227,10 +224,8 @@ export class BuildDisplayComponent implements OnInit {
     const incenseId = params.get("incense");
 
     return {
-      firstRangedWeapon:
-        this.rangedWeapons.find((w) => w.id === firearm1Id) || null,
-      secondRangedWeapon:
-        this.rangedWeapons.find((w) => w.id === firearm2Id) || null,
+      firearm1: this.rangedWeapons.find((w) => w.id === firearm1Id) || null,
+      firearm2: this.rangedWeapons.find((w) => w.id === firearm2Id) || null,
       demonicWeapon: this.rangedWeapons.find((w) => w.id === demonicId) || null,
       meleeWeapon:
         this.meleeWeapons.find((w) => w.id === params.get("melee")) || null,
@@ -250,14 +245,11 @@ export class BuildDisplayComponent implements OnInit {
   /**
    * Encodes a Build object into a query param string for sharing.
    * Omits empty/null slots for brevity.
-   * Example output: firearm1=due&firearm2=fat&melee=mos&beads=aab,adb&prophecies=ded,des
    */
   encodeBuildToQueryParams(build: Build): string {
     const params: string[] = [];
-    if (build.firstRangedWeapon)
-      params.push(`firearm1=${build.firstRangedWeapon.id}`);
-    if (build.secondRangedWeapon)
-      params.push(`firearm2=${build.secondRangedWeapon.id}`);
+    if (build.firearm1) params.push(`firearm1=${build.firearm1.id}`);
+    if (build.firearm2) params.push(`firearm2=${build.firearm2.id}`);
     if (build.demonicWeapon) params.push(`demonic=${build.demonicWeapon.id}`);
     if (build.meleeWeapon) params.push(`melee=${build.meleeWeapon.id}`);
     if (build.lightSpell) params.push(`ls=${build.lightSpell.id}`);
@@ -278,123 +270,6 @@ export class BuildDisplayComponent implements OnInit {
     params.push(`beads=${beads}`);
     params.push(`prophecies=${props}`);
     return params.join("&");
-  }
-
-  /**
-   * Decodes a build string from the new routing structure using tildes for sections and dots for items:
-   * /build/ase.fat.vul.mos.bc.bs.bob.bal.met~aab.adb.aib.ap1.apb.air~ded.des.ear.fir.far.gun
-   * [firstRanged].[secondRanged].[demonic].[melee].[lightSpell].[heavySpell].[relic].[fetish].[ring]~[rosaryBead1].[rosaryBead2]...~[prophecy1].[prophecy2]...
-   * Use '0' for null/empty slots.
-   */
-  parseBuildString(str: string): Build {
-    // Split into main, beads, prophecies using '~'
-    const [main, beads, prophecies] = str.split("~");
-    const [
-      firstRangedId,
-      secondRangedId,
-      demonicId,
-      meleeId,
-      lightSpellId,
-      heavySpellId,
-      relicId,
-      fetishId,
-      ringId,
-    ] = main.split(".");
-    const rosaryBeadIds = beads
-      ? beads.split(".").filter((id) => id !== "0")
-      : [];
-    const prophecyIds = prophecies
-      ? prophecies.split(".").filter((id) => id !== "0")
-      : [];
-
-    const build: Build = {
-      meleeWeapon: MELEE_WEAPONS.find((w) => w.id === meleeId) || null,
-      firstRangedWeapon:
-        RANGED_WEAPONS.find((w) => w.id === firstRangedId) || null,
-      secondRangedWeapon:
-        RANGED_WEAPONS.find((w) => w.id === secondRangedId) || null,
-      demonicWeapon: RANGED_WEAPONS.find((w) => w.id === demonicId) || null,
-      lightSpell: SPELLS.find((s) => s.id === lightSpellId) || null,
-      heavySpell: SPELLS.find((s) => s.id === heavySpellId) || null,
-      relic: MAGICAL_ITEMS.find((m) => m.id === relicId) || null,
-      fetish: MAGICAL_ITEMS.find((m) => m.id === fetishId) || null,
-      ring: MAGICAL_ITEMS.find((m) => m.id === ringId) || null,
-      incense: null,
-      rosaryBeads: rosaryBeadIds
-        .map((id) => ROSARY_BEADS.find((b) => b.id === id))
-        .filter(Boolean) as any,
-      prophecies: prophecyIds
-        .map((id) => PROPHECIES.find((p) => p.id === id))
-        .filter(Boolean) as any,
-    };
-    return build;
-  }
-
-  // Utility: get background for element(s)
-  getElementBackground(elements: ElementType[] | undefined | null): string {
-    console.log("[getElementBackground] input:", elements);
-    if (!elements || elements.length === 0) {
-      console.log("[getElementBackground] No elements, returning #222");
-      return "#222";
-    }
-    // Palette used for gradients
-    const elementColors = this.elementColorsMap;
-    const valid = elements.filter((e) => !!elementColors[e]);
-    console.log("[getElementBackground] valid:", valid);
-    if (valid.length === 0) {
-      console.log("[getElementBackground] No valid elements, returning #222");
-      return "#222";
-    }
-    const neutral = "#222"; // subtle base before element mark
-    if (valid.length === 1) {
-      const color = elementColors[valid[0]];
-      console.log(
-        "[getElementBackground] Single element:",
-        valid[0],
-        "color:",
-        color
-      );
-      const base = 80; // neutral covers ~4/5
-      const usable = 20; // color occupies ~1/5
-      const blendStart = base + Math.min(8, usable * 0.35); // small blend into color region
-      const gradient = `linear-gradient(150deg, ${neutral} 0%, ${neutral} ${base}%, ${color} ${blendStart}%, ${color} 100%)`;
-      return `linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), ${gradient}`;
-    }
-    // Multi-element: neutral first ~3/4; first transition (neutral -> first color) smooth,
-    // subsequent color-to-color boundaries have a small, equal blur for clarity
-    const n = valid.length;
-    const usable = 20; // percent span for element colors (from base to 100%)
-    const base = 80; // start of color region (neutral before this)
-    const segment = usable / n;
-    const blendIn = Math.min(8, usable * 0.35, segment * 0.8); // smooth blend from neutral to first color
-    const blur = Math.max(1.5, Math.min(3, segment * 0.25)); // small equal blur for later boundaries
-    const stopsArr: string[] = [`${neutral} 0%`, `${neutral} ${base}%`];
-    for (let i = 0; i < n; i++) {
-      const color = elementColors[valid[i]];
-      const start = base + i * segment;
-      const end = base + (i + 1) * segment;
-      // Start of current color: smooth in only for the first color
-      if (i === 0) {
-        const startIn = Math.min(100, start + blendIn);
-        stopsArr.push(`${color} ${startIn}%`);
-      } else {
-        stopsArr.push(`${color} ${start}%`);
-      }
-      // Boundary handling:
-      // - For later boundaries, create a small blur spanning [end - blur, end]
-      // - For the last color, extend to 100%
-      if (i < n - 1) {
-        const cutoff = Math.max(start, end - blur);
-        stopsArr.push(`${color} ${cutoff}%`);
-        const nextColor = elementColors[valid[i + 1]];
-        stopsArr.push(`${nextColor} ${end}%`);
-      } else {
-        stopsArr.push(`${color} 100%`);
-      }
-    }
-    const gradient = `linear-gradient(150deg, ${stopsArr.join(", ")})`;
-    console.log("[getElementBackground] Multi-element gradient:", gradient);
-    return `linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), ${gradient}`;
   }
 
   // Utility: create an array of a given length for skeleton ngFor
@@ -470,7 +345,6 @@ export class BuildDisplayComponent implements OnInit {
         : "";
       const url = params ? `${base}?${params}` : base;
       await navigator.clipboard.writeText(url);
-      console.log("Copied URL:", url);
       this.snackBar.open("URL copied to clipboard", undefined, {
         duration: 2000,
         verticalPosition: "bottom",
@@ -490,7 +364,6 @@ export class BuildDisplayComponent implements OnInit {
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      console.log("Copied URL (fallback):", url);
       this.snackBar.open("URL copied to clipboard", undefined, {
         duration: 2000,
         verticalPosition: "bottom",
@@ -582,9 +455,9 @@ export class BuildDisplayComponent implements OnInit {
     if (!this.build || !this.drawerSlot) return null;
     switch (this.drawerSlot.type) {
       case "firearm1":
-        return this.build.firstRangedWeapon?.name ?? null;
+        return this.build.firearm1?.name ?? null;
       case "firearm2":
-        return this.build.secondRangedWeapon?.name ?? null;
+        return this.build.firearm2?.name ?? null;
       case "demonic":
         return this.build.demonicWeapon?.name ?? null;
       case "melee":
@@ -621,10 +494,10 @@ export class BuildDisplayComponent implements OnInit {
     const b = { ...this.build } as Build;
     switch (this.drawerSlot.type) {
       case "firearm1":
-        b.firstRangedWeapon = null;
+        b.firearm1 = null;
         break;
       case "firearm2":
-        b.secondRangedWeapon = null;
+        b.firearm2 = null;
         break;
       case "demonic":
         b.demonicWeapon = null;
@@ -681,10 +554,10 @@ export class BuildDisplayComponent implements OnInit {
     const b = { ...this.build } as Build;
     switch (this.drawerSlot.type) {
       case "firearm1":
-        b.firstRangedWeapon = item;
+        b.firearm1 = item;
         break;
       case "firearm2":
-        b.secondRangedWeapon = item;
+        b.firearm2 = item;
         break;
       case "demonic":
         b.demonicWeapon = item;
@@ -738,8 +611,8 @@ export class BuildDisplayComponent implements OnInit {
 
   private updateQueryParams(build: Build) {
     const qp: any = {};
-    if (build.firstRangedWeapon) qp["firearm1"] = build.firstRangedWeapon.id;
-    if (build.secondRangedWeapon) qp["firearm2"] = build.secondRangedWeapon.id;
+    if (build.firearm1) qp["firearm1"] = build.firearm1.id;
+    if (build.firearm2) qp["firearm2"] = build.firearm2.id;
     if (build.demonicWeapon) qp["demonic"] = build.demonicWeapon.id;
     if (build.meleeWeapon) qp["melee"] = build.meleeWeapon.id;
     if (build.lightSpell) qp["ls"] = build.lightSpell.id;

@@ -7,8 +7,8 @@ import { Prophecy } from "./prophecy.model";
 import { Incense } from "./incense.model";
 
 export interface Build {
-  firstRangedWeapon: RangedWeapon | null;
-  secondRangedWeapon: RangedWeapon | null;
+  firearm1: RangedWeapon | null;
+  firearm2: RangedWeapon | null;
   demonicWeapon: RangedWeapon | null;
   meleeWeapon: MeleeWeapon | null;
   lightSpell: Spell | null;
