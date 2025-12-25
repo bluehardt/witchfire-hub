@@ -34,3 +34,6 @@ coverage/
 .eslintcache
 
 # End of Angular .gitignore
+
+# AI assistant instructions (keep local)
+.github/copilot-instructions.md

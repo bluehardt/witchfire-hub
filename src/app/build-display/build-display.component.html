@@ -174,27 +174,27 @@
       <div class="ranged-weapons">
         <div
           class="item-card"
-          *ngIf="build?.firstRangedWeapon; else r1Skeleton"
+          *ngIf="build?.firearm1; else r1Skeleton"
           tabindex="0"
           (click)="openDrawer('firearm1')"
           (keydown.enter)="openDrawer('firearm1')"
           (keydown.space)="openDrawer('firearm1')"
         >
-          <div class="item-label">{{ build?.firstRangedWeapon?.name }}</div>
+          <div class="item-label">{{ build?.firearm1?.name }}</div>
           <div class="item-img-container">
             <img
-              *ngIf="build?.firstRangedWeapon?.image"
-              [src]="build?.firstRangedWeapon?.image"
-              alt="{{ build?.firstRangedWeapon?.name }}"
+              *ngIf="build?.firearm1?.image"
+              [src]="build?.firearm1?.image"
+              alt="{{ build?.firearm1?.name }}"
             />
           </div>
           <div
             class="tile-element-dots"
-            *ngIf="build?.firstRangedWeapon?.element?.length"
+            *ngIf="build?.firearm1?.element?.length"
           >
             <span
               class="tile-element-dot"
-              *ngFor="let el of build?.firstRangedWeapon?.element"
+              *ngFor="let el of build?.firearm1?.element"
               [ngStyle]="{ backgroundColor: getElementColor(el) }"
               [matTooltip]="getElementLabel(el)"
               matTooltipPosition="above"
@@ -227,27 +227,27 @@
         </ng-template>
         <div
           class="item-card"
-          *ngIf="build?.secondRangedWeapon; else r2Skeleton"
+          *ngIf="build?.firearm2; else r2Skeleton"
           tabindex="0"
           (click)="openDrawer('firearm2')"
           (keydown.enter)="openDrawer('firearm2')"
           (keydown.space)="openDrawer('firearm2')"
         >
-          <div class="item-label">{{ build?.secondRangedWeapon?.name }}</div>
+          <div class="item-label">{{ build?.firearm2?.name }}</div>
           <div class="item-img-container">
             <img
-              *ngIf="build?.secondRangedWeapon?.image"
-              [src]="build?.secondRangedWeapon?.image"
-              alt="{{ build?.secondRangedWeapon?.name }}"
+              *ngIf="build?.firearm2?.image"
+              [src]="build?.firearm2?.image"
+              alt="{{ build?.firearm2?.name }}"
             />
           </div>
           <div
             class="tile-element-dots"
-            *ngIf="build?.secondRangedWeapon?.element?.length"
+            *ngIf="build?.firearm2?.element?.length"
           >
             <span
               class="tile-element-dot"
-              *ngFor="let el of build?.secondRangedWeapon?.element"
+              *ngFor="let el of build?.firearm2?.element"
               [ngStyle]="{ backgroundColor: getElementColor(el) }"
               [matTooltip]="getElementLabel(el)"
               matTooltipPosition="above"
@@ -874,34 +874,3 @@
   </svg>
   <span class="sr-only">Copy URL</span>
 </button>
-
-<!-- Helper: Element background rendering -->
-<ng-template #elementBg let-elements let-label="label">
-  <ng-container
-    *ngIf="elements && (Array.isArray(elements) ? elements.length : elements)"
-  >
-    <span
-      class="element-bg"
-      [ngStyle]="{
-        background: getElementBackground(elements)
-      }"
-    >
-      {{ label }}
-    </span>
-  </ng-container>
-  <ng-container
-    *ngIf="!elements || (Array.isArray(elements) && elements.length === 0)"
-  >
-    <span class="item-label">{{ label }}</span>
-  </ng-container>
-</ng-template>
-
-<!-- Helper: Element image background rendering -->
-<ng-template #elementImgBg let-elements let-content="content">
-  <div
-    class="item-img-container"
-    [ngStyle]="{ background: getElementBackground(elements) }"
-  >
-    <ng-container *ngTemplateOutlet="content"></ng-container>
-  </div>
-</ng-template>
