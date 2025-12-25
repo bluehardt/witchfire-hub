@@ -4,6 +4,7 @@ import { Spell } from "./spell.model";
 import { MagicalItem } from "./magical-item.model";
 import { RosaryBead } from "./rosary-bead.model";
 import { Prophecy } from "./prophecy.model";
+import { Incense } from "./incense.model";
 
 export interface Build {
   firstRangedWeapon: RangedWeapon | null;
@@ -15,6 +16,7 @@ export interface Build {
   relic: MagicalItem | null;
   fetish: MagicalItem | null;
   ring: MagicalItem | null;
+  incense: Incense | null;
   rosaryBeads: (RosaryBead | null)[];
   prophecies: (Prophecy | null)[];
 }
