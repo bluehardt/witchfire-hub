@@ -151,4 +151,13 @@ export const PROPHECIES: Prophecy[] = [
     location: "Island of the Damned: The Wailing Tower",
     image: prophecyImage("Prophecy of Witchfire"),
   },
+  {
+    id: "corrupted",
+    name: null,
+    description: null,
+    omen: null,
+    location: "Island of the Damned: The Wailing Tower",
+    image: prophecyImage("Corrupted"),
+    hidden: true,
+  },
 ];

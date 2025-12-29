@@ -1,4 +1,4 @@
-export enum ElementType {
+export enum ElementTypeEnum {
   Earth = "earth",
   Fire = "fire",
   Water = "water",

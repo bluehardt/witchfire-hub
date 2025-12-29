@@ -15,10 +15,10 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatMenuModule } from "@angular/material/menu";
 import { FormsModule } from "@angular/forms";
-import { ElementType } from "../enums/element-type.enum";
+import { ElementTypeEnum } from "../enums/element-type.enum";
 import { RosaryBeadRequirement } from "../models/rosary-bead.model";
-import { RangedWeaponCategory } from "../enums/ranged-weapon-category.enum";
-import { SpellType } from "../enums/spell-type.enum";
+import { RangedWeaponCategoryEnum } from "../enums/ranged-weapon-category.enum";
+import { SpellTypeEnum } from "../enums/spell-type.enum";
 // Main build display component for composing and sharing builds
 
 @Component({
@@ -115,24 +115,24 @@ export class BuildDisplayComponent implements OnInit {
   ) {}
 
   // Palette and labels used in gradients and element dots
-  private readonly elementColorsMap: Record<ElementType, string> = {
-    [ElementType.Fire]: "#d56e43", //"#a64b2a",
-    [ElementType.Earth]: "#50ba5f", //"#3f4e33",
-    [ElementType.Water]: "#0c9fd1", //"#6ea5c9",
-    [ElementType.Air]: "#ddd22a", //"#1f4fa8",
+  private readonly elementColorsMap: Record<ElementTypeEnum, string> = {
+    [ElementTypeEnum.Fire]: "#d56e43", //"#a64b2a",
+    [ElementTypeEnum.Earth]: "#50ba5f", //"#3f4e33",
+    [ElementTypeEnum.Water]: "#0c9fd1", //"#6ea5c9",
+    [ElementTypeEnum.Air]: "#ddd22a", //"#1f4fa8",
   };
-  private readonly elementLabelsMap: Record<ElementType, string> = {
-    [ElementType.Fire]: "Fire (Burn)",
-    [ElementType.Earth]: "Earth (Decay)",
-    [ElementType.Water]: "Water (Freeze)",
-    [ElementType.Air]: "Air (Shock)",
+  private readonly elementLabelsMap: Record<ElementTypeEnum, string> = {
+    [ElementTypeEnum.Fire]: "Fire (Burn)",
+    [ElementTypeEnum.Earth]: "Earth (Decay)",
+    [ElementTypeEnum.Water]: "Water (Freeze)",
+    [ElementTypeEnum.Air]: "Air (Shock)",
   };
 
-  getElementColor(el: ElementType): string {
+  getElementColor(el: ElementTypeEnum): string {
     return this.elementColorsMap[el];
   }
 
-  getElementLabel(el: ElementType): string {
+  getElementLabel(el: ElementTypeEnum): string {
     return this.elementLabelsMap[el];
   }
 
@@ -412,22 +412,22 @@ export class BuildDisplayComponent implements OnInit {
       case "firearm1":
       case "firearm2":
         items = this.rangedWeapons.filter(
-          (w) => w.category !== RangedWeaponCategory.Demonic
+          (w) => w.category !== RangedWeaponCategoryEnum.Demonic
         );
         break;
       case "demonic":
         items = this.rangedWeapons.filter(
-          (w) => w.category === RangedWeaponCategory.Demonic
+          (w) => w.category === RangedWeaponCategoryEnum.Demonic
         );
         break;
       case "melee":
         items = this.meleeWeapons;
         break;
       case "ls":
-        items = this.spells.filter((s) => s.type === SpellType.Light);
+        items = this.spells.filter((s) => s.type === SpellTypeEnum.Light);
         break;
       case "hs":
-        items = this.spells.filter((s) => s.type === SpellType.Heavy);
+        items = this.spells.filter((s) => s.type === SpellTypeEnum.Heavy);
         break;
       case "relic":
         items = this.magicalItems.filter((m) => m.type === "relic");
@@ -445,11 +445,11 @@ export class BuildDisplayComponent implements OnInit {
         items = this.rosaryBeads;
         break;
       case "prophecy":
-        items = this.prophecies;
+        items = this.prophecies.filter((p) => p != null && p.hidden !== true);
         break;
     }
     if (!term) return items;
-    return items.filter((i) => i.name.toLowerCase().includes(term));
+    return items.filter((i) => i && i.name && i.name.toLowerCase().includes(term));
   }
 
   // Current selection name for the active drawer slot (for clear button label)
