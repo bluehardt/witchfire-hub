@@ -856,21 +856,32 @@
   </mat-drawer-content>
 </mat-drawer-container>
 
-<!-- Floating copy-URL button -->
-<button
+<!-- Floating copy-URL button and menu -->
+<div
   *ngIf="!drawerOpen"
-  class="copy-url-fab"
-  aria-label="Copy build URL"
-  matTooltip="Copy URL"
-  matTooltipPosition="above"
-  tabindex="0"
-  (click)="copyShareUrl()"
-  (keydown.enter)="copyShareUrl()"
-  (keydown.space)="copyShareUrl($event)"
+  style="
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 100;
+  "
 >
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <rect x="9" y="3" width="12" height="12" rx="2" ry="2" />
-    <rect x="3" y="9" width="12" height="12" rx="2" ry="2" />
-  </svg>
-  <span class="sr-only">Copy URL</span>
-</button>
+  <button
+    class="copy-url-fab"
+    aria-label="Copy build URL"
+    matTooltip="Copy URL"
+    matTooltipPosition="above"
+    tabindex="0"
+    (click)="copyShareUrl()"
+    (keydown.enter)="copyShareUrl()"
+    (keydown.space)="copyShareUrl($event)"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <rect x="9" y="3" width="12" height="12" rx="2" ry="2" />
+      <rect x="3" y="9" width="12" height="12" rx="2" ry="2" />
+    </svg>
+    <span class="sr-only">Copy URL</span>
+  </button>
+</div>

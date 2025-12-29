@@ -1,3 +1,37 @@
+// Match menu icon color to overlay panel text color for consistency
+::ng-deep .cdk-overlay-pane .mat-mdc-menu-panel,
+.custom-menu-panel {
+  color: #eee !important;
+}
+
+.custom-menu-panel .menu-icon svg,
+.custom-menu-panel .menu-icon svg * {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+.custom-menu-panel .menu-icon svg,
+.custom-menu-panel .menu-icon svg * {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  color: #eee !important;
+}
+.custom-menu-panel .menu-icon svg {
+  fill: currentColor !important;
+  color: #eee !important;
+  stroke: currentColor !important;
+}
+// Ensure SVG icons in mat-menu use the font color
+.custom-menu-panel .menu-icon svg {
+  fill: currentColor !important;
+  color: inherit;
+}
+// Mat-menu border and background (MDC overlay targeting)
+::ng-deep .cdk-overlay-pane > .mat-mdc-menu-panel {
+  border: 1px solid #444 !important;
+  border-radius: 10px !important;
+  background: #181818 !important;
+  box-shadow: 0 4px 24px 0 #000b, 0 1.5px 0 #222 !important;
+}
 /* Remove desktop-specific hiding; rely on body to suppress global scroll */
 // Container - CSS Grid Layout
 .container {
