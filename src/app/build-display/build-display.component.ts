@@ -14,12 +14,13 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatMenuModule } from "@angular/material/menu";
-import { PopoverTooltipDirective } from "../shared/custom-popover/popover-tooltip.directive";
 import { FormsModule } from "@angular/forms";
 import { ElementTypeEnum } from "../enums/element-type.enum";
 import { RosaryBeadRequirement } from "../models/rosary-bead.model";
 import { RangedWeaponCategoryEnum } from "../enums/ranged-weapon-category.enum";
 import { SpellTypeEnum } from "../enums/spell-type.enum";
+import { getArcanasForProphecy } from "../shared/arcana-utils";
+import { PopoverDirective } from "../shared/custom-popover/popover.directive";
 // Main build display component for composing and sharing builds
 
 @Component({
@@ -34,12 +35,14 @@ import { SpellTypeEnum } from "../enums/spell-type.enum";
     MatSnackBarModule,
     MatTooltipModule,
     MatMenuModule,
-    PopoverTooltipDirective,
+    PopoverDirective,
   ],
   templateUrl: "./build-display.component.html",
   styleUrl: "./build-display.component.scss",
 })
 export class BuildDisplayComponent implements OnInit {
+  // Expose arcana utility for template popover
+  public getArcanasForProphecy = getArcanasForProphecy;
   build: Build | null = null;
   // Enable tooltips only on laptop/desktop (>1024px)
   isDesktop: boolean = window.innerWidth > 1024;
