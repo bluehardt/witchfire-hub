@@ -13,6 +13,7 @@ import { NgForOf, NgIf, NgStyle } from "@angular/common";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatMenuModule } from "@angular/material/menu";
 import { FormsModule } from "@angular/forms";
 import { ElementType } from "../enums/element-type.enum";
 import { RosaryBeadRequirement } from "../models/rosary-bead.model";
@@ -31,6 +32,7 @@ import { SpellType } from "../enums/spell-type.enum";
     FormsModule,
     MatSnackBarModule,
     MatTooltipModule,
+    MatMenuModule,
   ],
   templateUrl: "./build-display.component.html",
   styleUrl: "./build-display.component.scss",
@@ -114,16 +116,16 @@ export class BuildDisplayComponent implements OnInit {
 
   // Palette and labels used in gradients and element dots
   private readonly elementColorsMap: Record<ElementType, string> = {
-    [ElementType.Fire]: "#a64b2a",
-    [ElementType.Earth]: "#3f4e33",
-    [ElementType.Water]: "#6ea5c9",
-    [ElementType.Air]: "#1f4fa8",
+    [ElementType.Fire]: "#d56e43", //"#a64b2a",
+    [ElementType.Earth]: "#50ba5f", //"#3f4e33",
+    [ElementType.Water]: "#0c9fd1", //"#6ea5c9",
+    [ElementType.Air]: "#ddd22a", //"#1f4fa8",
   };
   private readonly elementLabelsMap: Record<ElementType, string> = {
-    [ElementType.Fire]: "Fire",
-    [ElementType.Earth]: "Earth",
-    [ElementType.Water]: "Water",
-    [ElementType.Air]: "Air",
+    [ElementType.Fire]: "Fire (Burn)",
+    [ElementType.Earth]: "Earth (Decay)",
+    [ElementType.Water]: "Water (Freeze)",
+    [ElementType.Air]: "Air (Shock)",
   };
 
   getElementColor(el: ElementType): string {
