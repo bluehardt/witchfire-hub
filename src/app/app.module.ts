@@ -8,6 +8,8 @@ import {
   MAT_TOOLTIP_DEFAULT_OPTIONS,
   MatTooltipDefaultOptions,
 } from "@angular/material/tooltip";
+import { CustomPopoverComponent } from "./shared/custom-popover/custom-popover.component";
+import { PopoverTooltipDirective } from "./shared/custom-popover/popover-tooltip.directive";
 
 const tooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 200,
@@ -17,7 +19,7 @@ const tooltipDefaults: MatTooltipDefaultOptions = {
 };
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CustomPopoverComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

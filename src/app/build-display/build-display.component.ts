@@ -14,6 +14,7 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatMenuModule } from "@angular/material/menu";
+import { PopoverTooltipDirective } from "../shared/custom-popover/popover-tooltip.directive";
 import { FormsModule } from "@angular/forms";
 import { ElementTypeEnum } from "../enums/element-type.enum";
 import { RosaryBeadRequirement } from "../models/rosary-bead.model";
@@ -33,6 +34,7 @@ import { SpellTypeEnum } from "../enums/spell-type.enum";
     MatSnackBarModule,
     MatTooltipModule,
     MatMenuModule,
+    PopoverTooltipDirective,
   ],
   templateUrl: "./build-display.component.html",
   styleUrl: "./build-display.component.scss",
@@ -449,7 +451,9 @@ export class BuildDisplayComponent implements OnInit {
         break;
     }
     if (!term) return items;
-    return items.filter((i) => i && i.name && i.name.toLowerCase().includes(term));
+    return items.filter(
+      (i) => i && i.name && i.name.toLowerCase().includes(term)
+    );
   }
 
   // Current selection name for the active drawer slot (for clear button label)
