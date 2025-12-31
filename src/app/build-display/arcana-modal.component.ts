@@ -30,10 +30,43 @@ import { PROPHECIES } from "../data/prophecies.data";
     ArcanaFilterPipe,
   ],
   animations: [
-    trigger("fadeInOut", [
+    trigger("itemGrowFade", [
+      transition(":enter", [
+        style({
+          opacity: 0,
+          transform: "translateX(-40px) scaleX(0)",
+          width: "0",
+          overflow: "hidden",
+          display: "inline-block",
+        }),
+        animate(
+          "100ms cubic-bezier(0.50, 0.00, 0.50, 1.00)",
+          style({
+            opacity: 1,
+            transform: "translateX(0) scaleX(1)",
+            width: "*",
+            overflow: "hidden",
+            display: "inline-block",
+          })
+        ),
+      ]),
+      transition(":leave", [
+        animate(
+          "100ms cubic-bezier(0.50, 0.00, 0.50, 1.00)",
+          style({
+            opacity: 0,
+            transform: "translateX(-40px) scaleX(0)",
+            width: "0",
+            overflow: "hidden",
+            display: "inline-block",
+          })
+        ),
+      ]),
+    ]),
+    trigger("placeholderFade", [
       transition(":enter", [
         style({ opacity: 0 }),
-        animate("200ms ease", style({ opacity: 1 })),
+        animate("150ms ease", style({ opacity: 1 })),
       ]),
       transition(":leave", [animate("200ms ease", style({ opacity: 0 }))]),
     ]),
@@ -153,5 +186,14 @@ export class ArcanaModalComponent {
     const slots = 3;
     if (arcanaCount <= slots) return 100;
     return Math.round((slots / arcanaCount) * 100);
+  }
+
+  /**
+   * Returns the filtered arcana for a prophecy, based on availability and showAllArcana.
+   */
+  getFilteredArcanaForProphecy(prophecyId: string): any[] {
+    const arcanaList = this.getArcanaForProphecy(prophecyId);
+    if (this.showAllArcana) return arcanaList;
+    return arcanaList.filter((a) => this.arcanaAvailability.get(a.id));
   }
 }
