@@ -1,3 +1,5 @@
+
+
 // Custom popover overlay panel styling
 .cdk-overlay-pane.custom-popover-panel {
   background: rgba(20, 20, 20, 0.96);
@@ -7,7 +9,7 @@
   padding: 6px 12px;
   font-size: 0.95rem;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-  width: max-content;
+  width: auto;
   max-width: 320px;
   pointer-events: auto;
   opacity: 0;
@@ -83,15 +85,18 @@ textarea {
 
 // Grid gap utilities
 .g-1 {
-  gap: 0.5rem !important;
+  gap: 0.25rem !important;
 }
 .g-2 {
-  gap: 1rem !important;
+  gap: 0.5rem !important;
 }
 .g-3 {
-  gap: 1.5rem !important;
+  gap: 1rem !important;
 }
 .g-4 {
+  gap: 1.5rem !important;
+}
+.g-5 {
   gap: 2rem !important;
 }
 

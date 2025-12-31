@@ -16,11 +16,14 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatMenuModule } from "@angular/material/menu";
 import { FormsModule } from "@angular/forms";
 import { ElementTypeEnum } from "../enums/element-type.enum";
+import { ELEMENT_COLORS_MAP } from "../shared/element-colors.map";
 import { RosaryBeadRequirement } from "../models/rosary-bead.model";
 import { RangedWeaponCategoryEnum } from "../enums/ranged-weapon-category.enum";
 import { SpellTypeEnum } from "../enums/spell-type.enum";
-import { getArcanasForProphecy } from "../shared/arcana-utils";
+import { getArcanaForProphecy } from "../shared/arcana-utils";
 import { PopoverDirective } from "../shared/custom-popover/popover.directive";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { ArcanaModalComponent } from "./arcana-modal.component";
 // Main build display component for composing and sharing builds
 
 @Component({
@@ -36,13 +39,26 @@ import { PopoverDirective } from "../shared/custom-popover/popover.directive";
     MatTooltipModule,
     MatMenuModule,
     PopoverDirective,
+    MatDialogModule,
   ],
   templateUrl: "./build-display.component.html",
   styleUrl: "./build-display.component.scss",
 })
 export class BuildDisplayComponent implements OnInit {
+  onArcanaButtonClick(): void {
+    if (this.build) {
+      this.dialog.open(ArcanaModalComponent, {
+        data: this.build,
+        maxWidth: "90vw",
+        maxHeight: "90vh",
+      });
+    }
+  }
+  get hasAnyProphecy(): boolean {
+    return !!this.build?.prophecies?.some((p) => !!p);
+  }
   // Expose arcana utility for template popover
-  public getArcanasForProphecy = getArcanasForProphecy;
+  public getArcanaForProphecy = getArcanaForProphecy;
   build: Build | null = null;
   // Enable tooltips only on laptop/desktop (>1024px)
   isDesktop: boolean = window.innerWidth > 1024;
@@ -116,16 +132,12 @@ export class BuildDisplayComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   // Palette and labels used in gradients and element dots
-  private readonly elementColorsMap: Record<ElementTypeEnum, string> = {
-    [ElementTypeEnum.Fire]: "#d56e43", //"#a64b2a",
-    [ElementTypeEnum.Earth]: "#50ba5f", //"#3f4e33",
-    [ElementTypeEnum.Water]: "#0c9fd1", //"#6ea5c9",
-    [ElementTypeEnum.Air]: "#ddd22a", //"#1f4fa8",
-  };
+  private readonly elementColorsMap = ELEMENT_COLORS_MAP;
   private readonly elementLabelsMap: Record<ElementTypeEnum, string> = {
     [ElementTypeEnum.Fire]: "Fire (Burn)",
     [ElementTypeEnum.Earth]: "Earth (Decay)",
