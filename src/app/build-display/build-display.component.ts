@@ -15,10 +15,15 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatMenuModule } from "@angular/material/menu";
 import { FormsModule } from "@angular/forms";
-import { ElementType } from "../enums/element-type.enum";
+import { ElementTypeEnum } from "../enums/element-type.enum";
+import { ELEMENT_COLORS_MAP } from "../shared/element-colors.map";
 import { RosaryBeadRequirement } from "../models/rosary-bead.model";
-import { RangedWeaponCategory } from "../enums/ranged-weapon-category.enum";
-import { SpellType } from "../enums/spell-type.enum";
+import { RangedWeaponCategoryEnum } from "../enums/ranged-weapon-category.enum";
+import { SpellTypeEnum } from "../enums/spell-type.enum";
+import { getArcanaForProphecy } from "../shared/arcana-utils";
+import { PopoverDirective } from "../shared/custom-popover/popover.directive";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { ArcanaModalComponent } from "./arcana-modal.component";
 // Main build display component for composing and sharing builds
 
 @Component({
@@ -33,11 +38,27 @@ import { SpellType } from "../enums/spell-type.enum";
     MatSnackBarModule,
     MatTooltipModule,
     MatMenuModule,
+    PopoverDirective,
+    MatDialogModule,
   ],
   templateUrl: "./build-display.component.html",
   styleUrl: "./build-display.component.scss",
 })
 export class BuildDisplayComponent implements OnInit {
+  onArcanaButtonClick(): void {
+    if (this.build) {
+      this.dialog.open(ArcanaModalComponent, {
+        data: this.build,
+        maxWidth: "90vw",
+        maxHeight: "90vh",
+      });
+    }
+  }
+  get hasAnyProphecy(): boolean {
+    return !!this.build?.prophecies?.some((p) => !!p);
+  }
+  // Expose arcana utility for template popover
+  public getArcanaForProphecy = getArcanaForProphecy;
   build: Build | null = null;
   // Enable tooltips only on laptop/desktop (>1024px)
   isDesktop: boolean = window.innerWidth > 1024;
@@ -111,28 +132,24 @@ export class BuildDisplayComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   // Palette and labels used in gradients and element dots
-  private readonly elementColorsMap: Record<ElementType, string> = {
-    [ElementType.Fire]: "#d56e43", //"#a64b2a",
-    [ElementType.Earth]: "#50ba5f", //"#3f4e33",
-    [ElementType.Water]: "#0c9fd1", //"#6ea5c9",
-    [ElementType.Air]: "#ddd22a", //"#1f4fa8",
-  };
-  private readonly elementLabelsMap: Record<ElementType, string> = {
-    [ElementType.Fire]: "Fire (Burn)",
-    [ElementType.Earth]: "Earth (Decay)",
-    [ElementType.Water]: "Water (Freeze)",
-    [ElementType.Air]: "Air (Shock)",
+  private readonly elementColorsMap = ELEMENT_COLORS_MAP;
+  private readonly elementLabelsMap: Record<ElementTypeEnum, string> = {
+    [ElementTypeEnum.Fire]: "Fire (Burn)",
+    [ElementTypeEnum.Earth]: "Earth (Decay)",
+    [ElementTypeEnum.Water]: "Water (Freeze)",
+    [ElementTypeEnum.Air]: "Air (Shock)",
   };
 
-  getElementColor(el: ElementType): string {
+  getElementColor(el: ElementTypeEnum): string {
     return this.elementColorsMap[el];
   }
 
-  getElementLabel(el: ElementType): string {
+  getElementLabel(el: ElementTypeEnum): string {
     return this.elementLabelsMap[el];
   }
 
@@ -412,22 +429,22 @@ export class BuildDisplayComponent implements OnInit {
       case "firearm1":
       case "firearm2":
         items = this.rangedWeapons.filter(
-          (w) => w.category !== RangedWeaponCategory.Demonic
+          (w) => w.category !== RangedWeaponCategoryEnum.Demonic
         );
         break;
       case "demonic":
         items = this.rangedWeapons.filter(
-          (w) => w.category === RangedWeaponCategory.Demonic
+          (w) => w.category === RangedWeaponCategoryEnum.Demonic
         );
         break;
       case "melee":
         items = this.meleeWeapons;
         break;
       case "ls":
-        items = this.spells.filter((s) => s.type === SpellType.Light);
+        items = this.spells.filter((s) => s.type === SpellTypeEnum.Light);
         break;
       case "hs":
-        items = this.spells.filter((s) => s.type === SpellType.Heavy);
+        items = this.spells.filter((s) => s.type === SpellTypeEnum.Heavy);
         break;
       case "relic":
         items = this.magicalItems.filter((m) => m.type === "relic");
@@ -445,11 +462,13 @@ export class BuildDisplayComponent implements OnInit {
         items = this.rosaryBeads;
         break;
       case "prophecy":
-        items = this.prophecies;
+        items = this.prophecies.filter((p) => p != null && p.hidden !== true);
         break;
     }
     if (!term) return items;
-    return items.filter((i) => i.name.toLowerCase().includes(term));
+    return items.filter(
+      (i) => i && i.name && i.name.toLowerCase().includes(term)
+    );
   }
 
   // Current selection name for the active drawer slot (for clear button label)

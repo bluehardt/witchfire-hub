@@ -1,4 +1,4 @@
-export enum SpellType {
+export enum SpellTypeEnum {
   Light = "light",
   Heavy = "heavy",
 }

@@ -1,14 +1,14 @@
 import {
-  RangedWeaponCategory,
-  RangedWeaponType,
+  RangedWeaponCategoryEnum,
+  RangedWeaponTypeEnum,
 } from "../enums/ranged-weapon-category.enum";
-import { ElementType } from "../enums/element-type.enum";
+import { ElementTypeEnum } from "../enums/element-type.enum";
 
 export interface RangedWeapon {
   id: string;
   name: string;
-  type: RangedWeaponType;
-  category: RangedWeaponCategory;
-  element: ElementType[];
+  type: RangedWeaponTypeEnum;
+  category: RangedWeaponCategoryEnum;
+  element: ElementTypeEnum[];
   image: string;
 }

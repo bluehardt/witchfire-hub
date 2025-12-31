@@ -1,0 +1,13 @@
+<div class="custom-popover popover-animate" #popoverRoot>
+  <ng-container
+    *ngIf="contentTpl; else defaultContent"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="contentContext"
+  >
+  </ng-container>
+  <ng-template #defaultContent>
+    <ng-container *ngIf="contentText !== null">
+      {{ contentText }}
+    </ng-container>
+  </ng-template>
+</div>

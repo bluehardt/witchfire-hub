@@ -1,11 +1,11 @@
-export enum RangedWeaponCategory {
+export enum RangedWeaponCategoryEnum {
   CloseRange = "close-range",
   MediumRange = "medium-range",
   LongRange = "long-range",
   Demonic = "demonic",
 }
 
-export enum RangedWeaponType {
+export enum RangedWeaponTypeEnum {
   BoltActionRifle = "bolt-action-rifle",
   AutoRifle = "auto-rifle",
   SniperRifle = "sniper-rifle",

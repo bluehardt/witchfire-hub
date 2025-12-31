@@ -24,8 +24,8 @@
             class="icon-btn"
             (click)="copyShareUrl()"
             aria-label="Copy URL"
-            matTooltip="Copy URL"
-            matTooltipPosition="above"
+            [appPopover]="'Copy URL'"
+            popoverTrigger="hover"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <rect x="9" y="3" width="12" height="12" rx="2" ry="2" />
@@ -36,8 +36,8 @@
             class="icon-btn close-btn"
             (click)="closeDrawer()"
             aria-label="Close"
-            matTooltip="Close"
-            matTooltipPosition="above"
+            [appPopover]="'Close'"
+            popoverTrigger="hover"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -61,6 +61,8 @@
       <button
         (click)="clearSelection()"
         class="drawer-item"
+        [appPopover]="'Clear selection'"
+        popoverTrigger="hover"
         style="
           display: flex;
           align-items: center;
@@ -129,8 +131,8 @@
                   class="element-dot"
                   *ngFor="let el of item.element"
                   [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                  [matTooltip]="getElementLabel(el)"
-                  matTooltipPosition="above"
+                  [appPopover]="getElementLabel(el)"
+                  popoverTrigger="hover"
                 ></span>
               </div>
             </div>
@@ -196,16 +198,16 @@
               class="tile-element-dot"
               *ngFor="let el of build?.firearm1?.element"
               [ngStyle]="{ backgroundColor: getElementColor(el) }"
-              [matTooltip]="getElementLabel(el)"
-              matTooltipPosition="above"
+              [appPopover]="getElementLabel(el)"
+              popoverTrigger="hover"
             ></span>
           </div>
           <button
             type="button"
             class="tile-clear-btn"
             aria-label="Clear"
-            matTooltip="Clear"
-            matTooltipPosition="above"
+            [appPopover]="'Clear'"
+            popoverTrigger="hover"
             (click)="$event.stopPropagation(); clearSlot('firearm1')"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -249,16 +251,16 @@
               class="tile-element-dot"
               *ngFor="let el of build?.firearm2?.element"
               [ngStyle]="{ backgroundColor: getElementColor(el) }"
-              [matTooltip]="getElementLabel(el)"
-              matTooltipPosition="above"
+              [appPopover]="getElementLabel(el)"
+              popoverTrigger="hover"
             ></span>
           </div>
           <button
             type="button"
             class="tile-clear-btn"
             aria-label="Clear"
-            matTooltip="Clear"
-            matTooltipPosition="above"
+            [appPopover]="'Clear'"
+            popoverTrigger="hover"
             (click)="$event.stopPropagation(); clearSlot('firearm2')"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -302,16 +304,16 @@
               class="tile-element-dot"
               *ngFor="let el of build?.demonicWeapon?.element"
               [ngStyle]="{ backgroundColor: getElementColor(el) }"
-              [matTooltip]="getElementLabel(el)"
-              matTooltipPosition="above"
+              [appPopover]="getElementLabel(el)"
+              popoverTrigger="hover"
             ></span>
           </div>
           <button
             type="button"
             class="tile-clear-btn"
             aria-label="Clear"
-            matTooltip="Clear"
-            matTooltipPosition="above"
+            [appPopover]="'Clear'"
+            popoverTrigger="hover"
             (click)="$event.stopPropagation(); clearSlot('demonic')"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -360,16 +362,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.meleeWeapon?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [matTooltip]="getElementLabel(el)"
-                matTooltipPosition="above"
+                [appPopover]="getElementLabel(el)"
+                popoverTrigger="hover"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              matTooltip="Clear"
-              matTooltipPosition="above"
+              [appPopover]="'Clear'"
+              popoverTrigger="hover"
               (click)="$event.stopPropagation(); clearSlot('melee')"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -417,16 +419,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.lightSpell?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [matTooltip]="getElementLabel(el)"
-                matTooltipPosition="above"
+                [appPopover]="getElementLabel(el)"
+                popoverTrigger="hover"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              matTooltip="Clear"
-              matTooltipPosition="above"
+              [appPopover]="'Clear'"
+              popoverTrigger="hover"
               (click)="$event.stopPropagation(); clearSlot('ls')"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -474,16 +476,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.heavySpell?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [matTooltip]="getElementLabel(el)"
-                matTooltipPosition="above"
+                [appPopover]="getElementLabel(el)"
+                popoverTrigger="hover"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              matTooltip="Clear"
-              matTooltipPosition="above"
+              [appPopover]="'Clear'"
+              popoverTrigger="hover"
               (click)="$event.stopPropagation(); clearSlot('hs')"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -529,16 +531,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.relic?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [matTooltip]="getElementLabel(el)"
-                matTooltipPosition="above"
+                [appPopover]="getElementLabel(el)"
+                popoverTrigger="hover"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              matTooltip="Clear"
-              matTooltipPosition="above"
+              [appPopover]="'Clear'"
+              popoverTrigger="hover"
               (click)="$event.stopPropagation(); clearSlot('relic')"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -584,16 +586,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.fetish?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [matTooltip]="getElementLabel(el)"
-                matTooltipPosition="above"
+                [appPopover]="getElementLabel(el)"
+                popoverTrigger="hover"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              matTooltip="Clear"
-              matTooltipPosition="above"
+              [appPopover]="'Clear'"
+              popoverTrigger="hover"
               (click)="$event.stopPropagation(); clearSlot('fetish')"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -636,16 +638,16 @@
                 class="tile-element-dot"
                 *ngFor="let el of build?.ring?.element"
                 [ngStyle]="{ backgroundColor: getElementColor(el) }"
-                [matTooltip]="getElementLabel(el)"
-                matTooltipPosition="above"
+                [appPopover]="getElementLabel(el)"
+                popoverTrigger="hover"
               ></span>
             </div>
             <button
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              matTooltip="Clear"
-              matTooltipPosition="above"
+              [appPopover]="'Clear'"
+              popoverTrigger="hover"
               (click)="$event.stopPropagation(); clearSlot('ring')"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -677,10 +679,7 @@
           (click)="openDrawer('bead', idx)"
           (keydown.enter)="openDrawer('bead', idx)"
           (keydown.space)="openDrawer('bead', idx)"
-          [matTooltip]="getBeadTooltip(idx)"
-          matTooltipPosition="above"
-          matTooltipClass="tooltip-rich"
-          [matTooltipDisabled]="!isDesktop"
+          [appPopoverTooltip]="getBeadTooltip(idx)"
         >
           <ng-container
             *ngIf="
@@ -730,8 +729,8 @@
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              matTooltip="Clear"
-              matTooltipPosition="above"
+              [appPopover]="'Clear'"
+              popoverTrigger="hover"
               (click)="$event.stopPropagation(); clearBead(idx)"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -750,11 +749,58 @@
         </div>
       </div>
       <div class="prophecies">
-        <div class="column-title">Prophecies</div>
+        <div
+          class="prophecies-header"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+          "
+        >
+          <span class="column-title">Prophecies</span>
+          <button
+            *ngIf="hasAnyProphecy"
+            type="button"
+            class="drawer-item arcana-btn"
+            aria-label="Arcana"
+            (click)="$event.stopPropagation(); onArcanaButtonClick()"
+          >
+            <span class="arcana-btn-label">Arcana</span>
+            <img
+              src="https://witchfire.wiki.gg/images/Pyramid-eye-icon.png"
+              alt="Arcana"
+              class="arcana-btn-img"
+            />
+          </button>
+        </div>
+        <ng-template #beadReqPopover let-req>
+          <div class="bead-req-pills">
+            <ng-container *ngIf="req?.flesh">
+              <span class="bead-pill">Flesh ({{ req.flesh }})</span>
+            </ng-container>
+            <ng-container *ngIf="req?.blood">
+              <span class="bead-pill">Blood ({{ req.blood }})</span>
+            </ng-container>
+            <ng-container *ngIf="req?.mind">
+              <span class="bead-pill">Mind ({{ req.mind }})</span>
+            </ng-container>
+            <ng-container *ngIf="req?.witchery">
+              <span class="bead-pill">Witchery ({{ req.witchery }})</span>
+            </ng-container>
+            <ng-container *ngIf="req?.arsenal">
+              <span class="bead-pill">Arsenal ({{ req.arsenal }})</span>
+            </ng-container>
+            <ng-container *ngIf="req?.faith">
+              <span class="bead-pill">Faith ({{ req.faith }})</span>
+            </ng-container>
+          </div>
+        </ng-template>
         <div
           class="prophecy-item"
           *ngFor="let i of skeletonArray(prophecySlots); let idx = index"
           [class.skeleton]="!build?.prophecies || !build?.prophecies[idx]"
+          style="transition: none; min-height: 72px; position: relative"
           tabindex="0"
           (click)="openDrawer('prophecy', idx)"
           (keydown.enter)="openDrawer('prophecy', idx)"
@@ -770,7 +816,7 @@
               <img
                 *ngIf="build?.prophecies[idx]?.image"
                 [src]="build?.prophecies[idx]?.image"
-                alt="{{ build?.prophecies[idx]?.name }}"
+                [alt]="build?.prophecies[idx]?.name"
                 style="width: 100%; height: auto; object-fit: contain"
               />
             </div>
@@ -781,20 +827,21 @@
               <span class="prophecy-omen">{{
                 build?.prophecies[idx]?.description
               }}</span>
-              <button
-                type="button"
-                class="tile-clear-btn"
-                aria-label="Clear"
-                matTooltip="Clear"
-                matTooltipPosition="above"
-                (click)="$event.stopPropagation(); clearProphecy(idx)"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                </svg>
-              </button>
             </div>
+            <button
+              type="button"
+              class="tile-clear-btn"
+              aria-label="Clear"
+              [appPopover]="'Clear'"
+              popoverTrigger="hover"
+              (click)="$event.stopPropagation(); clearProphecy(idx)"
+              style="position: absolute; top: 6px; right: 6px; z-index: 3"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+              </svg>
+            </button>
           </ng-container>
           <ng-template #prophecySkeleton>
             <div class="item-img-container prophecy-bead-img"></div>
@@ -835,8 +882,8 @@
               type="button"
               class="tile-clear-btn"
               aria-label="Clear"
-              matTooltip="Clear"
-              matTooltipPosition="above"
+              [appPopover]="'Clear'"
+              popoverTrigger="hover"
               (click)="$event.stopPropagation(); clearSlot('incense')"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -871,8 +918,8 @@
   <button
     class="copy-url-fab"
     aria-label="Copy build URL"
-    matTooltip="Copy URL"
-    matTooltipPosition="above"
+    [appPopover]="'Copy URL'"
+    popoverTrigger="hover"
     tabindex="0"
     (click)="copyShareUrl()"
     (keydown.enter)="copyShareUrl()"

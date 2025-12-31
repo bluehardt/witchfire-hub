@@ -6,4 +6,5 @@ export interface Prophecy {
   omen: string;
   location: string;
   image: string;
+  hidden?: boolean;
 }

@@ -1,3 +1,37 @@
+// Arcana button styled like drawer clear selection button
+.arcana-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), #222;
+  color: #ccc;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.arcana-btn:hover,
+.arcana-btn:focus-visible {
+  border-color: #555;
+  background: linear-gradient(rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.32)), #232323;
+  color: #eee;
+}
+.arcana-btn:active {
+  border-color: #666;
+  background: linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.18)), #1e1e1e;
+}
+.arcana-btn-label {
+  color: #eee;
+}
+.arcana-btn-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
 // Match menu icon color to overlay panel text color for consistency
 ::ng-deep .cdk-overlay-pane .mat-mdc-menu-panel,
 .custom-menu-panel {
@@ -563,8 +597,6 @@ mat-drawer-content {
 
 .bead-name,
 .prophecy-name {
-  font-size: 0.95rem;
-  font-weight: 500;
 }
 
 .bead-effect,

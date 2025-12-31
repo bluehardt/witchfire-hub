@@ -1,0 +1,121 @@
+<div class="arcana-modal">
+  <button (click)="close()" aria-label="Close" class="icon-btn close-btn">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+    </svg>
+  </button>
+  <div class="arcana-modal-title">Arcana</div>
+  <label
+    style="
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    "
+  >
+    <input
+      type="checkbox"
+      [(ngModel)]="showAllArcana"
+      style="accent-color: #44444a; width: 1.1em; height: 1.1em; margin: 0"
+    />
+    <span>Show unavailable Arcana (disregarding equipped items)</span>
+  </label>
+  <div class="arcana-modal-content">
+    <ng-container *ngIf="activeProphecies.length">
+      <div
+        *ngFor="let prophecy of activeProphecies"
+        class="arcana-modal-column"
+      >
+        <div class="d-flex justify-content-between align-items-center g-3">
+          <div class="arcana-modal-prophecy">
+            {{ prophecy?.name || "—" }}
+          </div>
+          <div
+            class="d-flex align-items-center g-1"
+            [appPopover]="
+              'Chance for an Arcanum to show up, taking into account equipment modifiers.'
+            "
+            [popoverTrigger]="popoverTrigger"
+          >
+            <div>{{ getArcanaChance(prophecy?.id) }}%</div>
+            <img
+              src="https://witchfire.wiki.gg/images/Pyramid-eye-closed-icon.png"
+              alt="Arcana chance"
+              width="24"
+              height="24"
+            />
+          </div>
+        </div>
+
+        <div class="arcana-modal-arcana">
+          <ng-container
+            *ngFor="let arcanum of getFilteredArcanaForProphecy(prophecy?.id)"
+          >
+            <div
+              class="arcana-modal-arcanum"
+              [@itemGrowFade]
+              style="overflow: hidden; display: inline-block"
+              [appPopover]="arcanaPopover"
+              [popoverContext]="{ arcanum: arcanum, prophecy: prophecy }"
+              popoverPlacement="top"
+              [popoverTrigger]="popoverTrigger"
+            >
+              <div class="arcana-modal-arcanum-icon-wrapper">
+                <div
+                  class="arcana-modal-arcanum-icon mask-hue"
+                  [ngClass]="{
+                    'arcana-unavailable': isArcanaUnavailable(arcanum)
+                  }"
+                  [style.--arcana-hue]="getElementColor(arcanum) || '#fff'"
+                  [style.--arcana-icon]="'url(' + arcanum.image + ')'"
+                  [attr.alt]="arcanum.name"
+                ></div>
+              </div>
+            </div>
+          </ng-container>
+          <!-- <div
+            class="arcana-modal-placeholder"
+            *ngIf="getFilteredArcanaForProphecy(prophecy?.id).length === 0"
+            [@placeholderFade]
+          >
+            No available Arcana
+          </div> -->
+        </div>
+        <!-- Move popover template outside the *ngFor so all icons can access it -->
+        <ng-template
+          #arcanaPopover
+          let-arcanum="arcanum"
+          let-prophecy="prophecy"
+        >
+          <div class="arcana-popover-content d-flex flex-column g-1">
+            <div class="arcana-popover-title">{{ arcanum.name }}</div>
+            <div class="arcana-popover-desc">{{ arcanum.description }}</div>
+            <hr
+              *ngIf="arcanum.prophecy.length > 1"
+              style="border-color: #ccc; width: 99%; margin: 0.25rem 0"
+            />
+            <div *ngIf="arcanum.prophecy.length > 1" class="d-flex flex-column">
+              <div style="font-size: 0.85rem; margin-bottom: 0.25rem">
+                Other Prophecies this Arcanum belongs to:
+              </div>
+              <div
+                *ngFor="
+                  let name of getOtherProphecyNames(
+                    arcanum.prophecy,
+                    prophecy?.id
+                  )
+                "
+                style="font-size: 0.85rem; color: #888"
+              >
+                {{ name }}
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </ng-container>
+    <!-- noProphecies template removed: only set prophecies are shown -->
+  </div>
+</div>

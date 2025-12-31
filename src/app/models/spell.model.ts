@@ -1,11 +1,11 @@
-import { SpellType } from "../enums/spell-type.enum";
-import { ElementType } from "../enums/element-type.enum";
+import { SpellTypeEnum } from "../enums/spell-type.enum";
+import { ElementTypeEnum } from "../enums/element-type.enum";
 
 export interface Spell {
   id: string;
   name: string;
-  type: SpellType;
+  type: SpellTypeEnum;
   power: string;
-  element: ElementType[];
+  element: ElementTypeEnum[];
   image: string;
 }

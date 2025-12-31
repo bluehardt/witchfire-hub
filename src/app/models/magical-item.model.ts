@@ -1,11 +1,11 @@
-import { MagicalItemType } from "../enums/magical-item-type.enum";
-import { ElementType } from "../enums/element-type.enum";
+import { MagicalItemTypeEnum } from "../enums/magical-item-type.enum";
+import { ElementTypeEnum } from "../enums/element-type.enum";
 
 export interface MagicalItem {
   id: string;
   name: string;
-  type: MagicalItemType;
+  type: MagicalItemTypeEnum;
   power: string;
-  element: ElementType[];
+  element: ElementTypeEnum[];
   image: string;
 }
