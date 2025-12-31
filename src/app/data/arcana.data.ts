@@ -1003,7 +1003,7 @@ export const ARCANA: Arcanum[] = [
     name: "Stormbringer",
     description:
       "Casting a Lightning spell grants temporary aura that discharges lightning bolts at nearby enemies.",
-    image: "/assets/images/arcana/Stormbringer.webp",
+    image: "assets/images/arcana/Stormbringer.webp",
     element: ElementTypeEnum.Air,
     prophecy: [ProphecyEnum.AirElement],
   },
