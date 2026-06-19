@@ -108,6 +108,14 @@ export const SPELLS: Spell[] = [
     image: "https://witchfire.wiki.gg/images/Miasma.png",
   },
   {
+    id: "pyreskull",
+    name: "Pyre Skull",
+    type: SpellTypeEnum.Light,
+    power: "TBA",
+    element: [ElementTypeEnum.Fire],
+    image: "https://witchfire.wiki.gg/images/Pyre_Skull.png",
+  },
+  {
     id: "rottenfiend",
     name: "Rotten Fiend",
     type: SpellTypeEnum.Heavy,
@@ -150,5 +158,13 @@ export const SPELLS: Spell[] = [
       "Strikes with a spectral sword or hammer, changing weapons based on enemy health.",
     element: [],
     image: "https://witchfire.wiki.gg/images/Twinshade.png",
+  },
+  {
+    id: "winternail",
+    name: "Winter Nail",
+    type: SpellTypeEnum.Heavy,
+    power: "TBA",
+    element: [ElementTypeEnum.Water],
+    image: "https://witchfire.wiki.gg/images/Winter_Nail.png",
   },
 ];

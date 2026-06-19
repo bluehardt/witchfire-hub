@@ -35,6 +35,14 @@ export const RANGED_WEAPONS: RangedWeapon[] = [
     image: rangedWeaponImage("Basilisk"),
   },
   {
+    id: "corpseeater",
+    name: "Corpse Eater",
+    type: RangedWeaponTypeEnum.HandCannon,
+    category: RangedWeaponCategoryEnum.MediumRange,
+    element: [ElementTypeEnum.Earth],
+    image: rangedWeaponImage("Corpse Eater"),
+  },
+  {
     id: "cricket",
     name: "Cricket",
     type: RangedWeaponTypeEnum.MachinePistol,
@@ -97,6 +105,14 @@ export const RANGED_WEAPONS: RangedWeapon[] = [
     category: RangedWeaponCategoryEnum.MediumRange,
     element: [ElementTypeEnum.Fire],
     image: rangedWeaponImage("Hangfire"),
+  },
+  {
+    id: "hearteater",
+    name: "Heart Eater",
+    type: RangedWeaponTypeEnum.HandCannon,
+    category: RangedWeaponCategoryEnum.MediumRange,
+    element: [ElementTypeEnum.Air],
+    image: rangedWeaponImage("Heart Eater"),
   },
   {
     id: "hunger",
@@ -187,12 +203,28 @@ export const RANGED_WEAPONS: RangedWeapon[] = [
     image: rangedWeaponImage("Rotweaver"),
   },
   {
+    id: "souleater",
+    name: "Soul Eater",
+    type: RangedWeaponTypeEnum.HandCannon,
+    category: RangedWeaponCategoryEnum.Demonic,
+    element: [],
+    image: rangedWeaponImage("Soul Eater"),
+  },
+  {
     id: "striga",
     name: "Striga",
     type: RangedWeaponTypeEnum.StakeGun,
     category: RangedWeaponCategoryEnum.MediumRange,
     element: [ElementTypeEnum.Fire, ElementTypeEnum.Air],
     image: rangedWeaponImage("Striga"),
+  },
+  {
+    id: "tempest",
+    name: "Tempest",
+    type: RangedWeaponTypeEnum.RayGun,
+    category: RangedWeaponCategoryEnum.Demonic,
+    element: [ElementTypeEnum.Air, ElementTypeEnum.Earth],
+    image: rangedWeaponImage("Tempest"),
   },
   {
     id: "tribunal",

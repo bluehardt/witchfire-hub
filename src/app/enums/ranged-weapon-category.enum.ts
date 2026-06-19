@@ -15,6 +15,7 @@ export enum RangedWeaponTypeEnum {
   GrenadeLauncher = "grenade-launcher",
   LeverActionRifle = "lever-action-rifle",
   Impaler = "impaler",
+  RayGun = "ray-gun",
   StakeGun = "stake-gun",
   Crossbow = "crossbow",
   StunGun = "stun-gun",
