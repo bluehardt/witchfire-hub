@@ -34,7 +34,7 @@ export class PopoverDirective implements OnDestroy {
     private vcr: ViewContainerRef,
     private overlay: Overlay,
     private positionBuilder: OverlayPositionBuilder,
-    private injector: Injector
+    private injector: Injector,
   ) {}
 
   @HostListener("mouseenter") onMouseEnter() {
@@ -89,6 +89,7 @@ export class PopoverDirective implements OnDestroy {
       panelClass: "custom-popover-panel",
       hasBackdrop: false,
     });
+
     // Animate overlay panel in
     setTimeout(() => {
       if (this.overlayRef && this.overlayRef.overlayElement) {
@@ -98,7 +99,7 @@ export class PopoverDirective implements OnDestroy {
     const portal = new ComponentPortal(
       CustomPopoverComponent,
       this.vcr,
-      this.injector
+      this.injector,
     );
     const ref = this.overlayRef.attach(portal);
     if (this.popoverContent instanceof TemplateRef) {

@@ -50,31 +50,13 @@
         [(ngModel)]="searchTerm"
         type="text"
         placeholder="Search..."
-        style="
-          padding: 0.5rem;
-          border-radius: 6px;
-          border: 1px solid #555;
-          background: #111;
-          color: #eee;
-        "
+        class="search-input"
       />
       <button
         (click)="clearSelection()"
-        class="drawer-item"
+        class="drawer-item clear-btn"
         [appPopover]="'Clear selection'"
         popoverTrigger="hover"
-        style="
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          padding: 0.5rem;
-          border-radius: 8px;
-          border: 1px solid #444;
-          background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
-            #222;
-          color: #ccc;
-        "
       >
         <span>Clear selection</span>
         <span *ngIf="currentSelectionName"> ({{ currentSelectionName }})</span>
@@ -96,18 +78,8 @@
           [class.has-element]="item?.element?.length"
           [ngStyle]="{
             background:
-              'linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), #222'
+              'linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), #222',
           }"
-          style="
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            padding: 0.5rem;
-            border: 1px solid #444;
-            border-radius: 8px;
-            color: #eee;
-            text-align: left;
-          "
         >
           <img
             [src]="item.image"
@@ -741,7 +713,7 @@
           </ng-container>
           <ng-template #beadSkeleton>
             <div class="item-img-container prophecy-bead-img"></div>
-            <div class="bead-info">
+            <div class="bead-info" style="height: 100%">
               <span class="skeleton-line w-80"></span>
               <span class="skeleton-line w-60"></span>
             </div>
