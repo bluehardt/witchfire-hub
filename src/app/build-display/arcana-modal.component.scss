@@ -38,7 +38,7 @@
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 }
 
 // Drawer close button style (copied from .picker-drawer .icon-btn and .icon-btn.close-btn)
@@ -64,7 +64,7 @@
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Button-border-box.png") 4 stretch;
 
   svg {
     width: 18px;
@@ -80,7 +80,7 @@
     background: rgba(255, 255, 255, 0.06);
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
 
-    border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+    border-image: url("../../assets/ui/Button-border-box-hover.png") 4 stretch;
   }
   &:active {
     transform: scale(0.98);
@@ -141,7 +141,7 @@
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 }
 
 .arcana-modal-prophecy {

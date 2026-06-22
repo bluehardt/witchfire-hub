@@ -321,10 +321,10 @@ mat-drawer-content {
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 
   &:hover {
-    border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+    border-image: url("../../assets/ui/Border-box-hover.png") 4 stretch;
   }
 
   .item-img-container {
@@ -400,7 +400,7 @@ mat-drawer-content {
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 
   // Ensure the drawer's own inner container doesn't scroll; we handle scrolling in the list area
   .mat-drawer-inner-container {
@@ -419,7 +419,7 @@ mat-drawer-content {
 
     box-sizing: border-box;
     border: 4px solid transparent;
-    border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+    border-image: url("../../assets/ui/Button-border-box-hover.png") 4 stretch;
   }
 
   // Drawer list item clickable affordances
@@ -435,7 +435,7 @@ mat-drawer-content {
 
     box-sizing: border-box;
     border: 4px solid transparent;
-    border-image: url("/assets/ui/Border-box.png") 4 stretch;
+    border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 
     cursor: pointer;
     transition:
@@ -450,7 +450,7 @@ mat-drawer-content {
 
       box-sizing: border-box;
       border: 4px solid transparent;
-      border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+      border-image: url("../../assets/ui/Border-box-hover.png") 4 stretch;
     }
 
     &:active {
@@ -460,11 +460,12 @@ mat-drawer-content {
     }
 
     &.clear-btn {
-      border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
+      border-image: url("../../assets/ui/Button-border-box.png") 4 stretch;
       text-align: center;
 
       &:hover {
-        border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+        border-image: url("../../assets/ui/Button-border-box-hover.png") 4
+          stretch;
       }
     }
   }
@@ -489,7 +490,7 @@ mat-drawer-content {
 
     box-sizing: border-box;
     border: 4px solid transparent;
-    border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
+    border-image: url("../../assets/ui/Button-border-box.png") 4 stretch;
 
     svg {
       width: 18px;
@@ -507,7 +508,7 @@ mat-drawer-content {
 
       box-sizing: border-box;
       border: 4px solid transparent;
-      border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+      border-image: url("../../assets/ui/Button-border-box-hover.png") 4 stretch;
     }
 
     &:active {
@@ -593,7 +594,7 @@ mat-drawer-content {
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 
   &:hover .tile-clear-btn,
   &:focus-within .tile-clear-btn {
@@ -603,8 +604,8 @@ mat-drawer-content {
 
   &.skeleton {
     background-color: rgba(255, 255, 255, 0.05);
-    // background-image: url("/assets/ui/Pencil-scribble.png");
-    // background-image: url("/assets/ui/Item-slot-background.png");
+    // background-image: url("../../assets/ui/Pencil-scribble.png");
+    // background-image: url("../../assets/ui/Item-slot-background.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -619,7 +620,7 @@ mat-drawer-content {
 
     box-sizing: border-box;
     border: 4px solid transparent;
-    border-image: url("/assets/ui/Border-box.png") 4 stretch;
+    border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 
     .item-img-container {
       background: transparent;
@@ -627,7 +628,7 @@ mat-drawer-content {
 
       //   width: 100%;
       //   height: 100%;
-      // background-image: url(/assets/ui/Item-slot-background.png);
+      // background-image: url(../../assets/ui/Item-slot-background.png);
       //   border-radius: 8px;
       //   display: flex;
       //   align-items: center;
@@ -696,7 +697,7 @@ mat-drawer-content {
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Button-border-box.png") 4 stretch;
 }
 
 .tile-clear-btn:hover {
@@ -721,7 +722,7 @@ mat-drawer-content {
 .tile-clear-btn:active {
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+  border-image: url("../../assets/ui/Button-border-box-hover.png") 4 stretch;
 }
 
 @media (max-width: 600px) {
@@ -764,7 +765,7 @@ mat-drawer-content {
   .item-img-container {
     box-sizing: border-box;
     border: 4px solid transparent;
-    border-image: url("/assets/ui/Border-box.png") 4 stretch;
+    border-image: url("../../assets/ui/Border-box.png") 4 stretch;
   }
 
   .bead-info,
@@ -786,7 +787,7 @@ mat-drawer-content {
 
   &:hover {
     .item-img-container {
-      border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+      border-image: url("../../assets/ui/Border-box-hover.png") 4 stretch;
     }
   }
 }
@@ -853,14 +854,14 @@ mat-drawer-content {
   .item-img-container {
     box-sizing: border-box;
     border: 4px solid transparent;
-    border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+    border-image: url("../../assets/ui/Border-box-hover.png") 4 stretch;
   }
 }
 
 .item-card[tabindex]:hover {
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+  border-image: url("../../assets/ui/Border-box-hover.png") 4 stretch;
 }
 
 .item-card[tabindex]:focus-visible,
@@ -911,7 +912,7 @@ mat-drawer-content {
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 }
 
 /* Incense skeleton should look like non-list item-card skeleton while keeping bead-sized layout */
@@ -923,12 +924,12 @@ mat-drawer-content {
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 
   &:hover {
     box-sizing: border-box;
     border: 4px solid transparent;
-    border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+    border-image: url("../../assets/ui/Border-box-hover.png") 4 stretch;
   }
 }
 
@@ -939,7 +940,7 @@ mat-drawer-content {
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Border-box.png") 4 stretch;
 }
 .skeleton-line + .skeleton-line {
   margin-top: 0.35rem;
@@ -978,7 +979,7 @@ mat-drawer-content {
 
   box-sizing: border-box;
   border: 4px solid transparent;
-  border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
+  border-image: url("../../assets/ui/Button-border-box.png") 4 stretch;
 
   svg {
     width: 24px;
@@ -994,7 +995,7 @@ mat-drawer-content {
 
     box-sizing: border-box;
     border: 4px solid transparent;
-    border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+    border-image: url("../../assets/ui/Button-border-box-hover.png") 4 stretch;
   }
 
   &:active {
