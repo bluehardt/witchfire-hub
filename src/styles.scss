@@ -1,11 +1,9 @@
-
-
 // Custom popover overlay panel styling
 .cdk-overlay-pane.custom-popover-panel {
   background: rgba(20, 20, 20, 0.96);
   color: #eee;
-  border: 1px solid #444;
-  border-radius: 6px;
+  // border: 1px solid #444;
+  // border-radius: 6px;
   padding: 6px 12px;
   font-size: 0.95rem;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
@@ -14,16 +12,23 @@
   pointer-events: auto;
   opacity: 0;
   transform: scale(0.92);
-  transition: opacity 120ms cubic-bezier(0.4, 0, 0.2, 1),
+  transition:
+    opacity 120ms cubic-bezier(0.4, 0, 0.2, 1),
     transform 120ms cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity, transform;
   white-space: pre-line;
   z-index: 1000;
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+
+  &.popover-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-.cdk-overlay-pane.custom-popover-panel.popover-visible {
-  opacity: 1;
-  transform: scale(1);
-}
+
 html {
   font-size: 18px; // increase base size for rem scaling
 }
@@ -49,6 +54,15 @@ body {
   height: 100%;
   overflow-x: hidden;
   overflow-y: hidden; /* suppress global scrollbar; use content area scrolling */
+
+  // background-image:
+  //   linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)),
+  //   url(/assets/ui/Site-background-dark.jpg);
+  // background-image:
+  //   linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)),
+  //   url(/assets/ui/Witchfire-Rapoza-keyart-no-logo.jpg);
+  background-position: center;
+  background-size: cover;
 }
 
 // Ensure form controls inherit the app font and color
@@ -109,27 +123,6 @@ textarea {
   padding-right: 1rem;
 }
 
-.item-card.skeleton {
-  background: none !important;
-  border: 2px dashed #444;
-  min-height: 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.item-card.skeleton .item-img-container {
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  border-radius: 8px;
-  border: 2px dashed #444;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .item-grid-2x3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -173,31 +166,4 @@ textarea {
 }
 .mat-mdc-snack-bar-container.snackbar-dark .mdc-snackbar__label {
   color: #eee !important;
-}
-
-/* Improve tooltip readability: subtle dark background, border, smaller font */
-/* Angular Material v17 (MDC) tooltip: set MDC CSS variables on panel */
-.mat-mdc-tooltip-panel {
-  --mdc-plain-tooltip-container-color: rgba(20, 20, 20, 0.92);
-  --mdc-plain-tooltip-supporting-text-color: #eee;
-}
-/* Style tooltip surface for border, radius, padding, font size */
-.mat-mdc-tooltip-panel .mdc-tooltip__surface,
-.mat-mdc-tooltip-panel .mat-mdc-tooltip-surface {
-  border: 1px solid #444 !important;
-  border-radius: 6px !important;
-  padding: 6px 8px !important;
-  font-size: 0.85rem !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-  white-space: pre-line; /* preserve new lines in tooltip text */
-}
-/* Legacy (non-MDC) selector fallback, in case */
-.mat-tooltip {
-  background: rgba(20, 20, 20, 0.92) !important;
-  color: #eee !important;
-  border: 1px solid #444 !important;
-  border-radius: 6px !important;
-  padding: 6px 8px !important;
-  font-size: 0.85rem !important;
-  white-space: pre-line; /* preserve new lines in legacy tooltips */
 }

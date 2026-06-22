@@ -1,3 +1,24 @@
+.mask-hue {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--arcana-hue, #fff);
+  -webkit-mask-image: var(--arcana-icon);
+  -webkit-mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: var(--arcana-icon);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  box-shadow: 0 1px 4px #0006;
+  display: block;
+  transition:
+    background 0.3s,
+    filter 0.3s,
+    opacity 0.3s;
+}
+
 // Arcana button styled like drawer clear selection button
 .arcana-btn {
   display: flex;
@@ -5,24 +26,36 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #444;
+  // border-radius: 8px;
+  // border: 1px solid #444;
   background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), #222;
   color: #ccc;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-image 0.2s;
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
 }
 .arcana-btn:hover,
 .arcana-btn:focus-visible {
-  border-color: #555;
-  background: linear-gradient(rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.32)), #232323;
+  // border-color: #555;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.32)), #232323;
   color: #eee;
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
 }
 .arcana-btn:active {
   border-color: #666;
-  background: linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.18)), #1e1e1e;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.18)), #1e1e1e;
 }
 .arcana-btn-label {
   color: #eee;
@@ -64,7 +97,9 @@
   border: 1px solid #444 !important;
   border-radius: 10px !important;
   background: #181818 !important;
-  box-shadow: 0 4px 24px 0 #000b, 0 1.5px 0 #222 !important;
+  box-shadow:
+    0 4px 24px 0 #000b,
+    0 1.5px 0 #222 !important;
 }
 /* Remove desktop-specific hiding; rely on body to suppress global scroll */
 // Container - CSS Grid Layout
@@ -140,17 +175,21 @@ mat-drawer-content {
     width: 48px;
     height: 48px;
   }
-  .item-card.skeleton .item-label {
-    margin-bottom: 0.5rem;
-  }
-  .item-card.skeleton::after {
-    content: "";
-    display: block;
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
-    background: transparent;
-    margin-top: 0.25rem;
+
+  .item-card.skeleton {
+    .item-label {
+      margin-bottom: 0.5rem;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      background: transparent;
+      margin-top: 0.25rem;
+    }
   }
 
   // Hide tile clear buttons on tablet (touch)
@@ -200,17 +239,20 @@ mat-drawer-content {
   }
 
   // Ensure skeleton tiles match filled tile height on mobile
-  .item-card.skeleton .item-label {
-    margin-bottom: 0.5rem; // match filled tiles
-  }
-  .item-card.skeleton::after {
-    content: "";
-    display: block;
-    width: 48px; // same as mobile image container
-    height: 48px;
-    border-radius: 8px;
-    background: transparent; // remove dashed border per feedback
-    margin-top: 0.25rem;
+  .item-card.skeleton {
+    .item-label {
+      margin-bottom: 0.5rem; // match filled tiles
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      width: 48px; // same as mobile image container
+      height: 48px;
+      border-radius: 8px;
+      background: transparent; // remove dashed border per feedback
+      margin-top: 0.25rem;
+    }
   }
 }
 // Grid Areas
@@ -276,6 +318,18 @@ mat-drawer-content {
 /* When incense is set, use the same neutral tile background as major tiles */
 .prophecies .prophecy-item.incense-entry:not(.skeleton) {
   background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), #222;
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+
+  &:hover {
+    border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+  }
+
+  .item-img-container {
+    border-image: none;
+  }
 }
 
 /* Position clear button within incense row and show on hover/focus */
@@ -328,16 +382,6 @@ mat-drawer-content {
   max-height: 60px !important;
 }
 
-.item-card.skeleton {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 2px dashed #444;
-}
-
-.item-card.skeleton .item-img-container {
-  background: transparent !important;
-  border: 2px dashed #444;
-}
-
 @media (max-width: 600px) {
   .item-img-container {
     width: 48px;
@@ -348,115 +392,255 @@ mat-drawer-content {
 // Drawer styling
 .picker-drawer {
   background: rgba(10, 10, 10, 0.95);
-  border-left: 1px solid #444;
+  // border-left: 1px solid #444;
   box-shadow: -12px 0 24px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   overflow: hidden; // keep header visible; scroll only the list area
-}
 
-// Ensure the drawer's own inner container doesn't scroll; we handle scrolling in the list area
-.picker-drawer .mat-drawer-inner-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Border-box.png") 4 stretch;
 
-// Drawer list item clickable affordances
-.picker-drawer .drawer-item {
-  cursor: pointer;
-  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease,
-    background-color 0.1s ease;
-}
-.picker-drawer .drawer-item:hover {
-  border-color: #555;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
-}
-.picker-drawer .drawer-item:active {
-  transform: scale(0.98);
-  border-color: #666;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
-}
+  // Ensure the drawer's own inner container doesn't scroll; we handle scrolling in the list area
+  .mat-drawer-inner-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
-// Small header icon buttons to match drawer item styling
-.picker-drawer .icon-btn {
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #444;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  color: #ccc;
-  cursor: pointer;
-  line-height: 1;
-  font-size: 1rem;
-  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease,
-    background-color 0.1s ease;
-}
-.picker-drawer .icon-btn svg {
-  width: 18px;
-  height: 18px;
-  display: block;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  fill: none;
-}
-.picker-drawer .icon-btn:hover {
-  border-color: #555;
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
-}
-.picker-drawer .icon-btn:active {
-  transform: scale(0.98);
-  border-color: #666;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
-}
-.picker-drawer .icon-btn:focus-visible {
-  outline: 2px solid #888;
-  outline-offset: 2px;
-}
+  .search-input {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background: #111;
+    color: #eee;
 
-/* Circular variant for drawer close button */
-.picker-drawer .icon-btn.close-btn {
-  border-radius: 8px; /* keep squareish with rounded corners */
-  font-size: 0; /* ensure SVG is pixel-centered */
-}
+    box-sizing: border-box;
+    border: 4px solid transparent;
+    border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+  }
 
-/* Small ID tag in the top-right of drawer items */
-/* Inline header row for name + id chip */
-.picker-drawer .drawer-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-}
-.picker-drawer .drawer-item-content {
-  flex: 1 1 auto;
-  min-width: 0;
-}
+  // Drawer list item clickable affordances
+  .drawer-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), #222;
+    color: #ccc;
+    text-align: left;
 
-/* Element dots indicator on the right */
-.picker-drawer .element-dots {
-  display: inline-flex;
-  gap: 6px;
-  margin-left: auto;
-  align-items: center;
-}
-.picker-drawer .element-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    box-sizing: border-box;
+    border: 4px solid transparent;
+    border-image: url("/assets/ui/Border-box.png") 4 stretch;
+
+    cursor: pointer;
+    transition:
+      transform 0.06s ease,
+      box-shadow 0.1s ease,
+      border-image 0.1s ease,
+      background-color 0.1s ease;
+
+    &:hover {
+      border-color: #555;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+
+      box-sizing: border-box;
+      border: 4px solid transparent;
+      border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+    }
+
+    &:active {
+      transform: scale(0.98);
+      border-color: #666;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
+    }
+
+    &.clear-btn {
+      border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
+      text-align: center;
+
+      &:hover {
+        border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+      }
+    }
+  }
+
+  // Small header icon buttons to match drawer item styling
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.04);
+    color: #ccc;
+    cursor: pointer;
+    line-height: 1;
+    font-size: 1rem;
+    transition:
+      transform 0.06s ease,
+      box-shadow 0.1s ease,
+      border-image 0.1s ease,
+      background-color 0.1s ease;
+
+    box-sizing: border-box;
+    border: 4px solid transparent;
+    border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      fill: none;
+    }
+
+    &:hover {
+      border-color: #555;
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+
+      box-sizing: border-box;
+      border: 4px solid transparent;
+      border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+    }
+
+    &:active {
+      transform: scale(0.98);
+      border-color: #666;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #888;
+      outline-offset: 2px;
+    }
+
+    /* Circular variant for drawer close button */
+    &.close-btn {
+      border-radius: 8px; /* keep squareish with rounded corners */
+      font-size: 0; /* ensure SVG is pixel-centered */
+    }
+  }
+
+  /* Small ID tag in the top-right of drawer items */
+  /* Inline header row for name + id chip */
+  .drawer-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .drawer-item-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: pre-wrap;
+  }
+
+  /* Element dots indicator on the right */
+  .element-dots {
+    display: inline-flex;
+    gap: 6px;
+    margin-left: auto;
+    align-items: center;
+  }
+
+  .element-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  }
 }
 
 /* Dots overlay on big tiles (bottom-right) */
 .item-card {
+  // .item-card.skeleton {
+  //   background: none !important;
+  //   border: 2px dashed #444;
+  //   min-height: 0;
+  //   min-width: 0;
+  //   display: flex;
+  //   flex-direction: column;
+  //   align-items: center;
+  //   justify-content: center;
+  // }
+  // .item-card.skeleton .item-img-container {
+
+  // }
+
   position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Unify with neutral + overlay used in element gradients */
+  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), #222;
+  height: 100%;
+  background-clip: border-box;
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.1s ease,
+    border-image 0.1s ease;
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+
+  &:hover .tile-clear-btn,
+  &:focus-within .tile-clear-btn {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.skeleton {
+    background-color: rgba(255, 255, 255, 0.05);
+    // background-image: url("/assets/ui/Pencil-scribble.png");
+    // background-image: url("/assets/ui/Item-slot-background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    // background: none;
+    min-height: 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+    border: 4px solid transparent;
+    border-image: url("/assets/ui/Border-box.png") 4 stretch;
+
+    .item-img-container {
+      background: transparent;
+      border: 2px dashed #444;
+
+      //   width: 100%;
+      //   height: 100%;
+      // background-image: url(/assets/ui/Item-slot-background.png);
+      //   border-radius: 8px;
+      //   display: flex;
+      //   align-items: center;
+      //   justify-content: center;
+    }
+
+    // Center label within skeleton-only placeholders (no image container)
+    .item-label {
+      margin-bottom: 0;
+    }
+  }
 }
+
 .tile-element-dots {
   position: absolute;
   right: 8px;
@@ -492,8 +676,8 @@ mat-drawer-content {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #444;
-  border-radius: 9999px; /* circle */
+  // border: 1px solid #444;
+  // border-radius: 9999px; /* circle */
   background: rgba(255, 255, 255, 0.04);
   color: #ccc;
   line-height: 1;
@@ -502,15 +686,26 @@ mat-drawer-content {
   z-index: 2;
   opacity: 0;
   visibility: hidden;
-  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease,
-    background-color 0.1s ease, opacity 120ms ease, visibility 120ms ease;
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.1s ease,
+    border-color 0.1s ease,
+    background-color 0.1s ease,
+    opacity 120ms ease,
+    visibility 120ms ease;
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
 }
+
 .tile-clear-btn:hover {
   border-color: #555;
   background: rgba(255, 255, 255, 0.06);
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
   color: #fff;
 }
+
 .tile-clear-btn:active {
   transform: scale(0.98);
   border-color: #666;
@@ -520,10 +715,13 @@ mat-drawer-content {
   outline: 2px solid #888;
   outline-offset: 2px;
 }
-.item-card:hover .tile-clear-btn,
-.item-card:focus-within .tile-clear-btn {
-  opacity: 1;
-  visibility: visible;
+
+.tile-clear-btn:hover,
+.tile-clear-btn:focus-visible,
+.tile-clear-btn:active {
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
 }
 
 @media (max-width: 600px) {
@@ -546,26 +744,6 @@ mat-drawer-content {
   padding: 0.5rem;
 }
 
-// Center label within skeleton-only placeholders (no image container)
-.item-card.skeleton .item-label {
-  margin-bottom: 0;
-}
-
-// Item Cards
-.item-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* Unify with neutral + overlay used in element gradients */
-  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), #222;
-  border-radius: 8px;
-  height: 100%;
-  border: 0; /* avoid transparent border seams with gradients */
-  background-clip: border-box;
-  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease;
-}
-
 /* Make incense tile match bead-item sizing while keeping item-card styling */
 /* Incense tile uses existing prophecy-item sizing and styles */
 
@@ -575,35 +753,47 @@ mat-drawer-content {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  padding: 0.25rem 0.5rem;
-  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+  // border: 1px solid transparent;
+  // border-radius: 8px;
+  // padding: 0.25rem 0.5rem;
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.1s ease,
+    border-color 0.1s ease;
+
+  .item-img-container {
+    box-sizing: border-box;
+    border: 4px solid transparent;
+    border-image: url("/assets/ui/Border-box.png") 4 stretch;
+  }
+
+  .bead-info,
+  .prophecy-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    gap: 0.25rem;
+  }
+
+  .bead-effect,
+  .prophecy-omen,
+  .bead-requirements {
+    font-size: 0.85rem;
+    color: #888;
+    white-space: pre-wrap; /* preserve line breaks in effect text */
+  }
+
+  &:hover {
+    .item-img-container {
+      border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+    }
+  }
 }
 
 /* Subtle backdrop for bead thumbnails: background only, no inner border */
 .bead-item .item-img-container {
   background: rgba(255, 255, 255, 0.05);
-}
-
-.bead-info,
-.prophecy-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
-  gap: 0.25rem;
-}
-
-.bead-name,
-.prophecy-name {
-}
-
-.bead-effect,
-.prophecy-omen,
-.bead-requirements {
-  font-size: 0.85rem;
-  color: #888;
 }
 
 // Ensure requirements wrap nicely within the cell
@@ -619,6 +809,7 @@ mat-drawer-content {
   gap: 0.375rem;
   margin-top: 0;
 }
+
 /* Default: hide tile bead requirement chips on desktop/laptop; use tooltips */
 .beads .bead-req-pills {
   display: none;
@@ -657,11 +848,19 @@ mat-drawer-content {
   cursor: pointer;
 }
 
-.item-card[tabindex]:hover,
 .bead-item[tabindex]:hover,
 .prophecy-item[tabindex]:hover {
-  border-color: #555;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+  .item-img-container {
+    box-sizing: border-box;
+    border: 4px solid transparent;
+    border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+  }
+}
+
+.item-card[tabindex]:hover {
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
 }
 
 .item-card[tabindex]:focus-visible,
@@ -709,22 +908,38 @@ mat-drawer-content {
 .bead-item.skeleton .item-img-container,
 .prophecy-item.skeleton .item-img-container {
   background: transparent !important;
-  border: 2px dashed #444;
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Border-box.png") 4 stretch;
 }
 
 /* Incense skeleton should look like non-list item-card skeleton while keeping bead-sized layout */
 .prophecies .prophecy-item.incense-entry.skeleton {
   background: rgba(255, 255, 255, 0.05) !important;
-  border: 2px dashed #444;
-  border-radius: 8px;
+  // border: 2px dashed #444;
+  // border-radius: 8px;
   min-height: 80px; /* match bead/prophecy image container height */
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Border-box.png") 4 stretch;
+
+  &:hover {
+    box-sizing: border-box;
+    border: 4px solid transparent;
+    border-image: url("/assets/ui/Border-box-hover.png") 4 stretch;
+  }
 }
 
 .skeleton-line {
   display: block;
   height: 0.75rem;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
+  // background: rgba(255, 255, 255, 0.08);
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Border-box.png") 4 stretch;
 }
 .skeleton-line + .skeleton-line {
   margin-top: 0.35rem;
@@ -743,11 +958,11 @@ mat-drawer-content {
   bottom: 2rem;
   width: 60px;
   height: 60px;
-  border-radius: 50%;
   background: rgba(20, 20, 20, 0.95);
   color: #eee;
-  border: 1px solid #444;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  // border-radius: 50%;
+  // border: 1px solid #444;
+  // box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -755,30 +970,43 @@ mat-drawer-content {
   line-height: 1;
   cursor: pointer;
   z-index: 1000;
-  transition: transform 0.06s ease, box-shadow 0.1s ease, border-color 0.1s ease,
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.1s ease,
+    border-color 0.1s ease,
     background-color 0.1s ease;
-}
-.copy-url-fab svg {
-  width: 24px;
-  height: 24px;
-  display: block;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  fill: none;
-}
-.copy-url-fab:hover {
-  border-color: #555;
-  background: rgba(30, 30, 30, 0.98);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
-}
-.copy-url-fab:active {
-  transform: scale(0.98);
-  border-color: #666;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) inset;
-}
-.copy-url-fab:focus-visible {
-  outline: 2px solid #888;
-  outline-offset: 2px;
+
+  box-sizing: border-box;
+  border: 4px solid transparent;
+  border-image: url("/assets/ui/Button-border-box.png") 4 stretch;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    fill: none;
+  }
+
+  &:hover {
+    background: rgba(30, 30, 30, 0.98);
+
+    box-sizing: border-box;
+    border: 4px solid transparent;
+    border-image: url("/assets/ui/Button-border-box-hover.png") 4 stretch;
+  }
+
+  &:active {
+    transform: scale(0.98);
+    border-color: #666;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) inset;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #888;
+    outline-offset: 2px;
+  }
 }
 
 // Scale FAB on larger viewports and keep it near content edge
