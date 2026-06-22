@@ -35,4 +35,12 @@ export const MELEE_WEAPONS: MeleeWeapon[] = [
     element: [],
     image: "https://witchfire.wiki.gg/images/Morning_Star.png",
   },
+  {
+    id: "sacringbell",
+    name: "Sacring Bell",
+    description: "A heavy, short-range bludgeoning strike.",
+    specialAttack: "Hold charged melee to toll a stunning shockwave.",
+    element: [],
+    image: "https://witchfire.wiki.gg/images/Sacring_Bell.png",
+  },
 ];

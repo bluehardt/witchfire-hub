@@ -66,14 +66,95 @@ export const ROSARY_BEADS: RosaryBead[] = [
     image: rosaryBeadImage("Ammo Reserves Bead I"),
   },
   {
-    id: "blessedaimaim1",
+    id: "beadofbarachiel",
+    name: "Bead of Barachiel",
+    type: "Fallen Preyer Bead",
+    tier: null,
+    effect: `25% damage boost on ammo pickup: up to 9s
+Ammo from small ammo pickups: up to +30%
+The bead's power grows with Arsenal`,
+    requirement: {},
+    location: "TBA",
+    image: rosaryBeadImage("Bead of Barachiel"),
+  },
+  {
+    id: "beadofelias",
+    name: "Bead of Elias",
+    type: "Fallen Preyer Bead",
+    tier: null,
+    effect: `Reduced damage from Madness: up to -70%
+Madness recovery delay: up to -75%
+The bead's power grows with Mind`,
+    requirement: {},
+    location: "TBA",
+    image: rosaryBeadImage("Bead of Elias"),
+  },
+  {
+    id: "beadofgoliath",
+    name: "Bead of Goliath",
+    type: "Fallen Preyer Bead",
+    tier: null,
+    effect: `Nearby enemies scale resistance (up to 5)
+Bonus resistance per enemy: up to +7%
+The bead's power grows with Flesh`,
+    requirement: {},
+    location: "TBA",
+    image: rosaryBeadImage("Bead of Goliath"),
+  },
+  {
+    id: "beadofmammon",
+    name: "Bead of Mammon",
+    type: "Fallen Preyer Bead",
+    tier: null,
+    effect: `Increased item drop chances: up to +50%
+Increased witchfire gains: up to +25%
+The bead's power grows with Witchery`,
+    requirement: {},
+    location: "TBA",
+    image: rosaryBeadImage("Bead of Mammon"),
+  },
+  {
+    id: "beadoforion",
+    name: "Bead of Orion",
+    type: "Fallen Preyer Bead",
+    tier: null,
+    effect: `Increased entry portal duration: up to +100%
+Reduced return portal delay: up to -60%
+The bead's power grows with Faith`,
+    requirement: {},
+    location: "TBA",
+    image: rosaryBeadImage("Bead of Orion"),
+  },
+  {
+    id: "beadofsefer",
+    name: "Bead of Sefer",
+    type: "Fallen Preyer Bead",
+    tier: null,
+    effect: `Trap activation delay: up to +0.6s
+The bead's power grows with Blood`,
+    requirement: {},
+    location: "TBA",
+    image: rosaryBeadImage("Bead of Sefer"),
+  },
+  {
+    id: "blessedaim1",
     name: "Blessed Aim Bead I",
     type: "Stat Bead",
     tier: "I",
-    effect: "Blessed Aim: +20%",
-    requirement: { faith: 20 },
+    effect: "Blessed Aim: +15%",
+    requirement: { faith: 15 },
     location: "Scarlet Coast",
     image: rosaryBeadImage("Blessed Aim Bead I"),
+  },
+  {
+    id: "blessedaim2",
+    name: "Blessed Aim Bead II",
+    type: "Stat Bead",
+    tier: "II",
+    effect: "Blessed Aim: +20%",
+    requirement: { faith: 30 },
+    location: "Shrouded Hermitorium",
+    image: rosaryBeadImage("Blessed Aim Bead II"),
   },
   {
     id: "blessedfire",
